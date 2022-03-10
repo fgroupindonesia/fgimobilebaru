@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="green">#6D9904</color>
+    <color name="md_lime_700">#587C02</color>
+    <color name="md_amber_A400">#F55E0C</color>
+    <color name="red">#f90026</color>
+    <color name="yellow">#F9FF33</color>
+    <color name="grey">#cecece</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+
+</resources>

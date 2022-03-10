@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="alarm_audio">
+        <item>Danger</item>
+        <item>Digital</item>
+        <item>Evacuation</item>
+        <item>None</item>
+    </string-array>
+
+    <string-array name="filter_status_attendance">
+        <item>Hadir</item>
+        <item>Idzin</item>
+        <item>Sakit</item>
+        <item>Semua</item>
+    </string-array>
+
+    <string-array name="filter_month_attendance">
+        <item>1 Bulan Lalu</item>
+        <item>Bulan Ini</item>
+    </string-array>
+
+    <string-array name="latihan_produk">
+        <item>Makanan</item>
+        <item>Minuman</item>
+        <item>Snack</item>
+    </string-array>
+
+    <string name="app_name">FGI Mobile</string>
+    <string name="app_version">1.2beta</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_register_newuser">Register New User</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_login">Login</string>
+    <string name="action_recovery">Forget Password?</string>
+
+    <string name="text_login_username">Username or Email</string>
+    <string name="text_login_pass">Password</string>
+
+    <string name="text_picture_preview">Preview</string>
+
+
+    <string name="text_desc_logo">Logo</string>
+    <string name="text_desc_onclass">Kelas Sudah bermula!</string>
+    <string name="text_desc_tidak_ada_voucher">Anda belum memiliki sesi konsultasi. Silahkan input kode voucher terlebih dahulu.</string>
+    <string name="text_desc_ada_voucher">Anda memiliki Voucher untuk memulai sesi konsultasi.</string>
+    <string name="text_desc_beli_voucher">Anda dapat membeli voucher pilihan sesuai yg anda butuhkan!</string>
+    <string name="text_desc_berhasil_beli_voucher">Pesanan voucher telah siap! Lihat nomor rek.tujuan untuk pembelian voucher sebelum hangus dalam 3 jam!</string>
+    <string name="text_desc_gagal_beli_voucher">Pesanan voucher gagal!</string>
+    <string name="text_desc_request_berhasil_terkirim">Request anda telah terkirim! Tim kami akan merespond anda dalam 3 x 24 jam!</string>
+    <string name="text_desc_request_gagal_terkirim">Request tidak dapat terkirim!</string>
+    <string name="text_desc_absensi_start">Kelas Sudah bermula, kamu sudah hadir?</string>
+
+    <string name="text_button_absensi">Data Absensi</string>
+    <string name="text_button_absensi_filter">Filter Data Absensi...</string>
+    <string name="text_button_payment_filter">Filter Data Payment...</string>
+
+    <string name="text_button_take_picture">Take Picture!</string>
+
+
+    <string name="text_button_retry">Retry</string>
+    <string name="text_button_back_home">Kembali ke Home</string>
+    <string name="text_button_request">Kirim Request</string>
+    <string name="text_button_beli_voucher">Beli Voucher</string>
+    <string name="text_button_check_stat">Check Status</string>
+    <string name="text_button_opsi">Settings</string>
+    <string name="text_button_konsul">Mulai Konsultasi</string>
+    <string name="text_button_voucher">Enter Voucher</string>
+    <string name="text_button_pakai_now">Pakai Sekarang!</string>
+
+    <string name="text_button_hadir">Hadir</string>
+    <string name="text_button_izin">Izin</string>
+
+    <string name="text_button_change_pass">Change Password</string>
+    <string name="text_title_popup">Title</string>
+    <string name="text_voucher_category">Category</string>
+    <string name="text_message_new_pass">Input New Password</string>
+    <string name="text_message_alasan_idzin">Input Alasan Idzin</string>
+    <string name="text_message_input_voucher">Input Voucher Code</string>
+
+    <string name="text_sertifikasi_info">Info Sertifikasi</string>
+    <string name="text_sertifikasi_not_available">Tidak tersedia</string>
+    <string name="text_sertifikasi_soal_jenis">Jenis:</string>
+    <string name="text_sertifikasi_soal_urutan_ke">Soal Ke: ##</string>
+    <string name="text_sertifikasi_soal_deskriptif">lorempisum bla-bla blaaaa panjaaaang....</string>
+    <string name="text_sertifikasi_click">Click dari listing dibawah ini untuk melihat detailnya.</string>
+    <string name="text_sertifikasi_exam_start">Sesaat lagi ujian dan praktek akan dimulai...</string>
+
+    <string name="text_sertifikasi_no_berkas">No.Berkas:</string>
+    <string name="text_sertifikasi_materi">Materi:</string>
+    <string name="text_sertifikasi_tgl_terbit">Tanggal Terbit:</string>
+
+    <string name="text_title_user_profile">User Profile</string>
+    <string name="text_title_kelas">Kelas</string>
+    <string name="text_title_sertifikasi">Sertifikasi</string>
+    <string name="text_title_desktop">Desktop</string>
+    <string name="text_title_desktop_clients">Berikut ini desktop (client) yang sedang login.</string>
+    <string name="text_title_desktop_country">Negara : </string>
+    <string name="text_title_desktop_ipaddress">IP Address : </string>
+    <string name="text_title_desktop_status">Status : </string>
+    <string name="text_title_desktop_macid">Machine ID : </string>
+    <string name="text_title_document">Dokumen</string>
+    <string name="text_title_opsi">Settings</string>
+    <string name="text_title_history">History</string>
+    <string name="text_title_status">Status</string>
+    <string name="text_title_pembayaran">Pembayaran</string>
+    <string name="text_title_tagihan">Tagihan</string>
+    <string name="text_title_absensi">Absensi</string>
+
+    <string name="text_label_filter_method_payment">Method</string>
+    <string name="text_label_filter_amount_payment">Sejumlah</string>
+    <string name="text_label_filter_date_payment">Tanggal</string>
+
+    <string name="text_label_filter_month_attendance">Bulan : </string>
+    <string name="text_label_filter_status_attendance">Status : </string>
+
+    <string name="text_title_payment">Payment</string>
+
+    <string name="text_textbox_judul">Judul</string>
+    <string name="text_textbox_keterangan">Tulis Keterangan disini</string>
+
+    <string name="text_label_error_login">Error username &amp; password tidak cocok!-</string>
+
+    <string name="text_label_payment_id">Payment ID: -</string>
+    <string name="text_label_tanggal_last_absen">Pertemuan Terakhir: -</string>
+    <string name="text_label_tanggal_next_absen">Pertemuan Berikutnya: -</string>
+    <string name="text_label_tanggal_change_absen">Diganti ke: -</string>
+    <string name="text_label_tanggal_reason_absen">Alasan: -</string>
+
+    <string name="text_label_voucher_code">Code:</string>
+    <string name="text_label_jenis_request">Jenis Request</string>
+    <string name="text_label_pembuatan_program">Pembuatan Program</string>
+    <string name="text_label_desain_grafis">Desain Grafis</string>
+    <string name="text_label_terjemah_dokumen">Terjemah Dokumen</string>
+    <string name="text_label_format_komputer">Format PC Laptop</string>
+    <string name="text_label_lain">Lain-lain</string>
+    <string name="text_label_keterangan">Keterangan lain</string>
+
+    <string name="text_label_kelas_belum_dimulai">Kelas Belum Dimulai!</string>
+    <string name="text_label_stop_alarm">Stop Alarm</string>
+    <string name="text_label_class_next">Kelas Selanjutnya: -</string>
+    <string name="text_label_class_absen">Absen Kehadiran</string>
+    <string name="text_label_class_beri_tanda_paraf">Berilah tanda paraf (tanda tangan) kehadiran ditengah bagian ini  : </string>
+    <string name="text_label_class_started">Kelas Sedang Berlangsung</string>
+    <string name="text_label_class_time_elapsed">Sejak : </string>
+    <string name="text_label_class_ended">Kelas Telah Usai</string>
+    <string name="text_label_class_rating_description">Bagaimana kondisi pembelajaran tadi?</string>
+    <string name="text_label_class_attendance_description"> # Apakah kamu hadir di kelas saat ini?</string>
+    <string name="text_label_class_attendance_hadir">Ya, Hadir</string>
+    <string name="text_label_class_attendance_idzin">Idzin</string>
+
+    <string name="text_label_attendance_total">Keseluruhan data absensi : 0 data.</string>
+    <string name="text_label_payment_total">Keseluruhan data payment : 0 data.</string>
+
+    <string name="text_label_document_description_total">Keseluruhan dokumen anda berjumlah : 0 file.</string>
+    <string name="text_label_document_search">Ketik pencarian...</string>
+    <string name="text_label_document_size">Size :</string>
+    <string name="text_label_document_date">Tanggal :</string>
+    <string name="text_label_document_title">Judul.sesuatu</string>
+
+    <string name="text_label_rating_confused">Bingung</string>
+    <string name="text_label_rating_normal">Baik</string>
+    <string name="text_label_rating_excited">Semangat</string>
+
+    <string name="text_label_noSesi">Sesi 1</string>
+    <string name="text_label_tanggal_sesi">dd/MMM/yyyy HH:mm</string>
+
+
+    <string name="text_label_voucher_1jam">Konsul 1 Jam</string>
+    <string name="text_label_voucher_2jam">Konsul 2 Jam</string>
+    <string name="text_label_voucher_4jam">Konsul 4 Jam</string>
+    <string name="text_label_voucher_1bulan">Kelas 1 Bulan</string>
+    <string name="text_label_voucher_3bulan">Kelas 3 Bulan</string>
+
+    <string name="text_label_voucher_durasi">Quota Durasi: 0 menit.</string>
+
+
+    <string name="text_label_time_start">00:00</string>
+    <string name="text_label_start_konsultasi">Start</string>
+
+    <string name="text_label_notif_pembayaran">Notifikasi tagihan pembayaran</string>
+    <string name="text_label_notif_kelas_1_hour">Notifikasi 1 jam sebelum kelas</string>
+
+    <string name="text_label_sisa_pertemuan">Sisa Pertemuan : 0</string>
+    <string name="text_label_total_pertemuan">Total Pertemuan : 0</string>
+
+    <string name="text_label_tagihan">Tagihan : 0</string>
+    <string name="text_label_tanggal_tagihan">Tagihan Pembayaran : 0</string>
+    <string name="text_label_nilai_tagihan">Senilai : 0</string>
+    <string name="text_label_via_terakhir">Via : -</string>
+    <string name="text_label_tagihan_status">Status : -.</string>
+
+    <string name="text_label_title_request">Request : -.</string>
+    <string name="text_label_status_request">Status : -.</string>
+    <string name="text_label_progress_request">Progress : -.</string>
+    <string name="text_label_type_request">Type : -.</string>
+    <string name="text_label_dateposted_request">Date Posted : -.</string>
+    <string name="text_label_hello_username">Hello username!</string>
+    <string name="text_label_username">Username</string>
+    <string name="text_label_password">Password</string>
+    <string name="text_label_email">Email</string>
+    <string name="text_label_address">Address</string>
+    <string name="text_label_mobile">Mobile Phone</string>
+    <string name="text_label_teamviewer_id">TeamViewer ID</string>
+    <string name="text_label_teamviewer_pass">TeamViewer Pass</string>
+
+    <string name="text_label_tanggal">Tanggal</string>
+    <string name="text_label_status">Status</string>
+    <string name="text_label_kelas">Kelas</string>
+    <string name="text_label_hari">Hari</string>
+
+    <string name="text_label_save">Save</string>
+    <string name="text_label_loading">Loading...</string>
+    <string name="text_label_tagihan_pembayaran">Tagihan Pembayaran</string>
+    <string name="text_label_tagihan_bayar_sekarang">Bayar Sekarang</string>
+    <string name="text_label_tagihan_unggah_bukti">Unggah Bukti Pembayaran</string>
+    <string name="text_label_tagihan_terbit_tanggal">Tanggal terbit : </string>
+    <string name="text_label_nanti_dulu">Nanti Dulu...</string>
+    <string name="text_label_rupiah_tagihan_pembayaran">Rp.0</string>
+    <string name="text_label_rupiah_tagihan_pembayaran_loading">Rp. loading...</string>
+
+    <string name="text_menu_consultation_finished">Finish Session</string>
+    <string name="text_menu_bank_details">Bank Details</string>
+
+    <string name="text_menu_idzin">Request Idzin</string>
+    <string name="text_menu_jadwal">Check Jadwal</string>
+    <string name="text_menu_confirm">Konfirmasi Pembayaran</string>
+    <string name="text_menu_active_req">Active Request</string>
+
+    <string name="text_label_settings_sound">Click sounds.</string>
+    <string name="text_label_settings_auto_logout">Automatic Logout after 5 min.</string>
+    <string name="text_label_settings_notification">Notification for any updates.</string>
+
+    <string name="text_label_signature_tandai">Goreskan tanda tangan dibawah ini dengan benar...</string>
+
+    <string name="text_button_save">Save</string>
+    <string name="text_button_clear">Clear</string>
+
+    <string name="text_link_logout">Logout</string>
+    <string name="text_button_send">Send</string>
+    <string name="text_button_ok">OK</string>
+    <string name="text_button_nanti">Nanti dulu</string>
+    <string name="text_button_next">Selanjutnya</string>
+
+    <string name="text_label_title_history">History</string>
+    <string name="text_label_title_settings">Settings</string>
+
+    <string-array name="class_category">
+        <item>-pilih materi-</item>
+        <item>Java Core</item>
+        <item>Visual Studio (VB.NET/C#/C++)</item>
+        <item>Desain Grafis (Photoshop/Coreldraw)</item>
+        <item>Web Programming (Php,HTML,CSS,MySQL)</item>
+        <item>Aplikasi Perkantoran (Ms.Office)</item>
+        <item>Video Editing (After Effect/Premier)</item>
+        <item>AutoCAD</item>
+    </string-array>
+
+    <string-array name="session_category">
+        <item>-pilih sesi-</item>
+        <item>online</item>
+        <item>offline</item>
+    </string-array>
+
+    <string-array name="alasan_tak_hadir">
+        <item>sakit</item>
+        <item>idzin</item>
+    </string-array>
+
+
+</resources>
