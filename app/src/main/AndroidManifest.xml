@@ -21,7 +21,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AttendanceActivity"></activity>
+
+        <activity
+            android:name=".PortraitCaptureActivity"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity android:name=".DokumenActivity" />
+        <activity android:name=".DesktopActivity" />
+
+        <activity android:name=".AttendanceActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".HistoryActivity" />
         <activity android:name=".UserProfileActivity" />
@@ -30,7 +41,6 @@
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

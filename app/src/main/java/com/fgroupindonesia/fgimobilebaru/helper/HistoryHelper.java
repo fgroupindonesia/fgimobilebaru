@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.fgroupindonesia.fgimobilebaru.AttendanceActivity;
 import com.fgroupindonesia.fgimobilebaru.BillActivity;
+import com.fgroupindonesia.fgimobilebaru.DesktopActivity;
 import com.fgroupindonesia.fgimobilebaru.HomeActivity;
 import com.fgroupindonesia.fgimobilebaru.LoginActivity;
 import com.fgroupindonesia.fgimobilebaru.SettingsActivity;
@@ -37,6 +38,21 @@ public class HistoryHelper {
         WebRequest httpCall = new WebRequest(homeAct, homeAct);
 
         httpCall.addData("description", "logging out from mobile phone successfully");
+        httpCall.addData("username", username);
+        httpCall.addData("token", token);
+
+        // we need to wait for the response
+        httpCall.setWaitState(true);
+        httpCall.setRequestMethod(WebRequest.POST_METHOD);
+        httpCall.setTargetURL(URLReference.HistoryAdd);
+        httpCall.execute();
+    }
+
+    public void verifyingRemoteClient(String username, String token, DesktopActivity deskAct){
+
+        WebRequest httpCall = new WebRequest(deskAct, deskAct);
+
+        httpCall.addData("description", "verifying remote client from mobile phone successfully");
         httpCall.addData("username", username);
         httpCall.addData("token", token);
 

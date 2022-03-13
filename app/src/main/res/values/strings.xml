@@ -29,7 +29,7 @@
     <string name="app_name">FGI Mobile</string>
     <string name="app_version">1.2beta</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_register_newuser">Register New User</string>
+    <string name="action_register_newuser">Register Peserta Baru</string>
     <string name="action_settings">Settings</string>
     <string name="action_login">Login</string>
     <string name="action_recovery">Forget Password?</string>
@@ -236,6 +236,7 @@
     <string name="text_button_save">Save</string>
     <string name="text_button_clear">Clear</string>
 
+    <string name="text_link_cant_login">Tidak bisa login atau lupa password?</string>
     <string name="text_link_logout">Logout</string>
     <string name="text_button_send">Send</string>
     <string name="text_button_ok">OK</string>

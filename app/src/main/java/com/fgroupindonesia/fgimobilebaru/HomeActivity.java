@@ -369,9 +369,9 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
         } else if (jenisActivity == ACT_SERTIFIKASI) {
         //    intent = new Intent(this, SertifikasiActivity.class);
         } else if (jenisActivity == ACT_DOCUMENT) {
-       //     intent = new Intent(this, DokumenActivity.class);
+            intent = new Intent(this, DokumenActivity.class);
         } else if (jenisActivity == ACT_DESKTOP) {
-      //      intent = new Intent(this, DesktopActivity.class);
+            intent = new Intent(this, DesktopActivity.class);
         } else if (jenisActivity == ACT_TAGIHAN) {
             intent = new Intent(this, BillActivity.class);
         } else if (jenisActivity == ACT_ABSENSI) {

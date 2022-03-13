@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 import com.fgroupindonesia.fgimobilebaru.helper.UIHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.URLReference;
 import com.fgroupindonesia.fgimobilebaru.helper.WebRequest;
+import com.fgroupindonesia.fgimobilebaru.helper.WhatsappSender;
 import com.fgroupindonesia.fgimobilebaru.helper.shared.UserData;
 import com.fgroupindonesia.fgimobilebaru.object.Token;
 import com.fgroupindonesia.fgimobilebaru.object.User;
@@ -36,6 +38,7 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
     EditText editTextUsername, editTextPassword;
     TextView textViewErrorMessage;
     ProgressBar progressBar;
+    TextView textViewregisterNewUser, textViewTidakBisaLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +53,21 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
 
         progressBar = (ProgressBar) findViewById(R.id.loadingProgressBar);
         textViewErrorMessage = (TextView) findViewById(R.id.textViewErrorMessage);
+        textViewTidakBisaLogin = (TextView) findViewById(R.id.textViewTidakBisaLogin);
+        textViewregisterNewUser = (TextView) findViewById(R.id.textViewregisterNewUser);
 
+        textViewTidakBisaLogin.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+        textViewregisterNewUser.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 
         UIHelper.toggleTitleApp(this);
 
         requestPermission();
     }
 
-
+    public void whatsappAdmin(View v){
+        WhatsappSender was = new WhatsappSender(this);
+        was.sendMessageToWhatsAppContact("*Admin* \n\nTolong saya tidak bisa login *FGIMobile*!");
+    }
 
     private void requestPermission(){
         int PERMISSION_ALL = 1;
