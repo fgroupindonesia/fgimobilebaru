@@ -8,6 +8,7 @@ import com.fgroupindonesia.fgimobilebaru.AttendanceActivity;
 import com.fgroupindonesia.fgimobilebaru.BillActivity;
 import com.fgroupindonesia.fgimobilebaru.DesktopActivity;
 import com.fgroupindonesia.fgimobilebaru.HomeActivity;
+import com.fgroupindonesia.fgimobilebaru.KelasActivity;
 import com.fgroupindonesia.fgimobilebaru.LoginActivity;
 import com.fgroupindonesia.fgimobilebaru.SettingsActivity;
 import com.fgroupindonesia.fgimobilebaru.object.Attendance;
@@ -38,6 +39,21 @@ public class HistoryHelper {
         WebRequest httpCall = new WebRequest(homeAct, homeAct);
 
         httpCall.addData("description", "logging out from mobile phone successfully");
+        httpCall.addData("username", username);
+        httpCall.addData("token", token);
+
+        // we need to wait for the response
+        httpCall.setWaitState(true);
+        httpCall.setRequestMethod(WebRequest.POST_METHOD);
+        httpCall.setTargetURL(URLReference.HistoryAdd);
+        httpCall.execute();
+    }
+
+    public void startStudyingClass(String username, String token, String message, KelasActivity act){
+
+        WebRequest httpCall = new WebRequest(act, act);
+
+        httpCall.addData("description", message);
         httpCall.addData("username", username);
         httpCall.addData("token", token);
 

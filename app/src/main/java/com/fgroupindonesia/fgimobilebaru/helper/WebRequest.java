@@ -9,6 +9,22 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.tonyodev.fetch2.Download;
+import com.tonyodev.fetch2.Error;
+import com.tonyodev.fetch2.Fetch;
+import com.tonyodev.fetch2.FetchConfiguration;
+import com.tonyodev.fetch2.FetchListener;
+import com.tonyodev.fetch2.NetworkType;
+import com.tonyodev.fetch2.Priority;
+import com.tonyodev.fetch2.Request;
+import com.tonyodev.fetch2core.DownloadBlock;
+import com.tonyodev.fetch2core.Func;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,6 +39,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 // url comes in the last parameter
 public class WebRequest extends AsyncTask<String, Integer, String> {
@@ -30,10 +47,11 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 	 URL url;
 	 String response = "";
 	 final String charset ="UTF-8";
-	 String targetURL = null, endResult=null;
+	 private String targetURL = null, endResult=null;
 	 boolean verifiedCodeStat=false;
 	 boolean downloadStat = false;
 	 public Navigator webcall;
+	public NavigatorFetch webcallFetch;
 	 private ProgressBar mPDialog;
 
 	 // private static final String URL_ROOT_API = "http://api.fgroupindonesia.com/fgimobile";
@@ -55,10 +73,12 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 	 private ArrayList<FileInputStream> fileStreams = new ArrayList(); 
 	 private ArrayList<String> fileNames = new ArrayList(); 
 
-	 private Activity myContext;
+	 private AppCompatActivity myContext;
 	 private boolean multipartform = false;
 	 private static boolean waitState = false;
-	 
+
+
+
 	public boolean isMultipartform() {
 		return multipartform;
 	}
@@ -71,7 +91,7 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 		
 	}
 
-	public WebRequest(Activity contIn, Navigator webCallIn){
+	public WebRequest(AppCompatActivity contIn, Navigator webCallIn){
 		myContext = contIn;
 		pilihanMethod= GET_METHOD;
 		webcall = webCallIn;
@@ -223,10 +243,10 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 		        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		        conn.setReadTimeout(Keys.TIME_OUT_WAIT_WEB_REQUEST);
 		        conn.setConnectTimeout(Keys.TIME_OUT_WAIT_WEB_REQUEST);
-		        
+
 		        if(pilihanMethod==POST_METHOD){
 		        	conn.setRequestMethod("POST");	
-		        }else{
+		        }else {
 		        	conn.setRequestMethod("GET");
 		        }
 		        
@@ -323,45 +343,55 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 							response += line;
 						}
 
-					} else {
+					} else if(isDownloadState()==true) {
 
-		        		// this is for downloading progress
-						// save to file locally
+							// this is for downloading progress
+							// save to file locally
+							//ShowDialog.message(myContext, "downloading manual GET");
 
-						int length = conn.getContentLength();
+							int length = conn.getContentLength();
 
-						// the file name expected is here in the first data
-						String singleFile = getFirstData();
-						String endPath = Environment.getExternalStorageDirectory()
-								+ "/Android/data/"+ myContext.getApplicationContext().getPackageName() + "/files/" + singleFile;
+							// the file name expected is here in the first data
+							String singleFile = getFirstData();
+							String pathNa = Environment.getExternalStorageDirectory()
+									+ "/Android/data/" + myContext.getPackageName() + "/files/";
+							String endPath = pathNa + singleFile;
 
-						//String endPath = Environment.getExternalStorageDirectory() + File.separator + singleFile;
-						//pd.setMax(length / (1000));
 
-						InputStream is = conn.getInputStream();
-						FileOutputStream os = new FileOutputStream(endPath);
+							File fs = new File(pathNa);
+							fs.mkdirs();
 
-						byte data[] = new byte[4096];
-						long total = 0;
-						int count;
-						while ((count = is.read(data)) != -1) {
-							if (isCancelled()) {
-								is.close();
-								return null;
+							fs = new File(endPath);
+							fs.createNewFile();
+
+							//String endPath = Environment.getExternalStorageDirectory() + File.separator + singleFile;
+							//pd.setMax(length / (1000));
+
+							InputStream is = conn.getInputStream();
+							FileOutputStream os = new FileOutputStream(endPath);
+
+							byte data[] = new byte[4096];
+							long total = 0;
+							int count;
+							while ((count = is.read(data)) != -1) {
+								if (isCancelled()) {
+									is.close();
+									return null;
+								}
+								total += count;
+
+								if (length > 0) // only if total length is known
+									publishProgress((int) (total * 100 / length));
+
+								os.write(data, 0, count);
 							}
-							total += count;
 
-							if (length > 0) // only if total length is known
-								publishProgress((int) (total * 100 / length));
+							os.close();
+							is.close();
 
-							os.write(data, 0, count);
-						}
+							// the respond is actually the file path completely
+							response = endPath;
 
-						os.close();
-						is.close();
-
-						// the respond is actually the file path completely
-						response = endPath;
 
 					}
 		        }
@@ -491,5 +521,6 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 		val = URLDecoder.decode(mess, "UTF-8");
 		return val;
 	}
+
 	
 }

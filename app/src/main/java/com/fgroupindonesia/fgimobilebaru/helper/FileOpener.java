@@ -4,30 +4,51 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
+import com.fgroupindonesia.fgimobilebaru.PDFActivity;
 
 import java.io.File;
 
+import static android.provider.Settings.AUTHORITY;
+
 public class FileOpener {
 
-    public static void openFile(Activity act, File fileIn){
-        Uri uri = null;
+
+    public FileOpener(){
+
+    }
+
+    public static String getSystemFilePath(AppCompatActivity act){
+      String lokasi =  Environment.getExternalStorageDirectory()
+                + "/Android/data/"+ act.getPackageName() + "/files/";
+      return lokasi;
+    }
+
+    public static void openFile(AppCompatActivity act, File fileIn){
+        Uri uri  = null;
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
         if (Build.VERSION.SDK_INT < 24) {
             uri = Uri.fromFile(fileIn);
         } else {
-            uri = Uri.parse(fileIn.getPath());
+            uri = Uri.parse(fileIn.getPath()); // My work-around for SDKs up to 29.
         }
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         if (fileIn.toString().contains(".doc") || fileIn.toString().contains(".docx")) {
             // Word document
             intent.setDataAndType(uri, "application/msword");
         } else if (fileIn.toString().contains(".pdf")) {
             // PDF file
-            intent.setDataAndType(uri, "application/pdf");
+             intent.setDataAndType(uri, "application/pdf");
+
         } else if (fileIn.toString().contains(".ppt") || fileIn.toString().contains(".pptx")) {
             // Powerpoint file
             intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
@@ -64,7 +85,10 @@ public class FileOpener {
         }
 
         try {
-            act.startActivity(intent);
+
+                act.startActivity(intent);
+
+
         }
         catch (Exception e) {
             ShowDialog.message(act, "error while opening file " + fileIn.getName());

@@ -42,6 +42,8 @@
 
     <string name="text_desc_logo">Logo</string>
     <string name="text_desc_onclass">Kelas Sudah bermula!</string>
+    <string name="text_desc_kelas_belum">Kelas belum bermula.</string>
+    <string name="text_desc_tidak_ada_dokumen">Anda belum memiliki dokumen.</string>
     <string name="text_desc_tidak_ada_voucher">Anda belum memiliki sesi konsultasi. Silahkan input kode voucher terlebih dahulu.</string>
     <string name="text_desc_ada_voucher">Anda memiliki Voucher untuk memulai sesi konsultasi.</string>
     <string name="text_desc_beli_voucher">Anda dapat membeli voucher pilihan sesuai yg anda butuhkan!</string>
@@ -155,6 +157,7 @@
     <string name="text_label_document_description_total">Keseluruhan dokumen anda berjumlah : 0 file.</string>
     <string name="text_label_document_search">Ketik pencarian...</string>
     <string name="text_label_document_size">Size :</string>
+    <string name="text_label_document_status">Status :</string>
     <string name="text_label_document_date">Tanggal :</string>
     <string name="text_label_document_title">Judul.sesuatu</string>
 

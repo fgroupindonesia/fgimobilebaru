@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -72,6 +74,7 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
     private void requestPermission(){
         int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {
+                android.Manifest.permission.MANAGE_EXTERNAL_STORAGE,
                 android.Manifest.permission.INTERNET,
                 android.Manifest.permission.CAMERA,
                 android.Manifest.permission.ACCESS_WIFI_STATE,
@@ -116,16 +119,30 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        WebRequest httpCall = new WebRequest(LoginActivity.this, LoginActivity.this);
+        int WAITING_TIME_DELAY = 3;
+        int milisTime = 1000 * WAITING_TIME_DELAY;
 
-        httpCall.addData("username", getText(editTextUsername));
-        httpCall.addData("password", getText(editTextPassword));
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //call and post to the server
 
-        // we need to wait for the response
-        httpCall.setWaitState(true);
-        httpCall.setRequestMethod(WebRequest.POST_METHOD);
-        httpCall.setTargetURL(URLReference.UserLogin);
-        httpCall.execute();
+                WebRequest httpCall = new WebRequest(LoginActivity.this, LoginActivity.this);
+
+                httpCall.addData("username", getText(editTextUsername));
+                httpCall.addData("password", getText(editTextPassword));
+
+                // we need to wait for the response
+                httpCall.setWaitState(true);
+                httpCall.setRequestMethod(WebRequest.POST_METHOD);
+                httpCall.setTargetURL(URLReference.UserLogin);
+                httpCall.execute();
+
+            }
+        }, milisTime);
+
+
     }
 
     // for History purposes track record
@@ -160,7 +177,6 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
                     JsonElement mJson =  parser.parse(jsons.toString());
 
                     Token objectToken  = objectG.fromJson(mJson, Token.class);
-
 
                     UserData.savePreference(Keys.USERNAME, objectToken.getUsername());
                     UserData.savePreference(Keys.TOKEN, objectToken.getToken());

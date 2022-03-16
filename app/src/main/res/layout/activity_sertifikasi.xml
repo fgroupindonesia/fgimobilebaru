@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DokumenActivity">
+    tools:context=".SertifikasiActivity">
 
     <LinearLayout
         android:id="@+id/linearLayoutLoading"
@@ -30,7 +30,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayoutDokumen"
+        android:id="@+id/linearLayoutSertifikat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -50,51 +50,24 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="@string/text_title_document"
+                android:text="@string/text_sertifikasi_info"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewDocumentTotal"
+                android:id="@+id/textViewSertifikatTotal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/text_label_document_description_total"
                 android:textColor="@color/black" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/editTextSearchDocument"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/text_label_document_search"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPersonName"
-                    android:maxLines="1" />
-
-                <ImageView
-                    android:id="@+id/imageViewSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:onClick="searchDocument"
-                    android:src="@android:drawable/ic_menu_search" />
-            </LinearLayout>
         </LinearLayout>
 
         <ListView
             android:id="@+id/listViewDocument"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_selected"
-            android:choiceMode="singleChoice"
-            android:longClickable="true"
             android:visibility="gone"
             tools:listitem="@layout/list_document">
 

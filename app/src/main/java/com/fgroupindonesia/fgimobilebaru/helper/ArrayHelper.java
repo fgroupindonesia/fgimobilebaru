@@ -2,10 +2,22 @@ package com.fgroupindonesia.fgimobilebaru.helper;
 
 import com.fgroupindonesia.fgimobilebaru.object.Document;
 import com.fgroupindonesia.fgimobilebaru.object.RemoteLoginClient;
+import com.fgroupindonesia.fgimobilebaru.object.Sertifikat;
 
 import java.util.ArrayList;
 
 public class ArrayHelper {
+
+    public static ArrayList<Sertifikat> fillArrayList(ArrayList <Sertifikat> dataOut, Sertifikat [] dataIn){
+
+        for(Sertifikat satuan: dataIn){
+            dataOut.add(satuan);
+        }
+
+        return dataOut;
+
+    }
+
 
     public static ArrayList<Document> fillArrayList(ArrayList <Document> dataOut, Document [] dataIn){
 

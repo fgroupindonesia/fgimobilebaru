@@ -3,7 +3,7 @@ package com.fgroupindonesia.fgimobilebaru.helper;
 // just an interface for WebRequest httpcall
 public  interface Navigator {
 
-    public void nextActivity();
-    public void onSuccess(String urlTarget, String result);
+     void nextActivity();
+     void onSuccess(String urlTarget, String result);
 
 }

@@ -15,7 +15,10 @@ public class Keys {
 
    public final static int ACT_CAMERA_BILL = 1, ACT_GALLERY_BILL = 2, // for 3secs
    PERIOD_OF_TIME_BILL = 3 * 1000, PERIOD_OF_TIME_WAIT_GENERAL = PERIOD_OF_TIME_BILL+1000,
-   ACT_PICK_PICTURE = 4, TIME_OUT_WAIT_WEB_REQUEST = 6500;
+   ACT_PICK_PICTURE = 4, TIME_OUT_WAIT_WEB_REQUEST = 9000,
+           STATUS_RATE_NORMAL = 1, STATUS_RATE_CONFUSED = 0, STATUS_RATE_EXCITED = 2,
+   LAYOUT_LOADING = 1, LAYOUT_KELAS_AKTIF = 2, LAYOUT_KELAS_BELUM_AKTIF = 3,
+           LAYOUT_KELAS_RATING = 4;
 
    public static String USERNAME = "username", PASSWORD = "password",
            EMAIL = "email", MOBILE_PHONE = "mobile_phone", ADDRESS = "address",
@@ -29,7 +32,8 @@ public class Keys {
            MIN_TO_GO = "min_to_go", CLASS_REGISTERED = "class_registered",
            SCHEDULE = "schedule", LAST_SIGNATURE_DATE = "last_signature_date",
            LAST_SIGNATURE_DATETIME = "last_signature_date_time",
-           LAST_SIGNATURE_STATUS="last_signature_status";
+           LAST_SIGNATURE_STATUS="last_signature_status",
+   FILE_PDF_TARGET = "file_pdf_target";
 
 
 }

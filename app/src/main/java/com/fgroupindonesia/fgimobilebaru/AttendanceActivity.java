@@ -22,6 +22,7 @@ import com.fgroupindonesia.fgimobilebaru.helper.ImageHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.Keys;
 import com.fgroupindonesia.fgimobilebaru.helper.Navigator;
 import com.fgroupindonesia.fgimobilebaru.helper.RespondHelper;
+import com.fgroupindonesia.fgimobilebaru.helper.ScheduleChecker;
 import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 import com.fgroupindonesia.fgimobilebaru.helper.UIHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.URLReference;
@@ -372,68 +373,7 @@ public class AttendanceActivity extends AppCompatActivity implements Navigator {
         callDataAttendance();
     }
 
-    private boolean isTimeEligilbe(String timeIn){
 
-        // timeIN is using this format HH:mm
-
-        boolean eligible = false;
-
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        Date dNow = new Date();
-
-        String timeNow = sdf.format(dNow);
-
-        int hourNow = Integer.parseInt(timeNow.split(":")[0]);
-        int hourSchedule = Integer.parseInt(timeIn.split(":")[0]);
-
-        ShowDialog.message(this, "jam sekarang " + hourNow + " sementara jam dia " + hourSchedule);
-
-        // the eligible time is 1 hour only but not more
-        if(hourNow < hourSchedule){
-            eligible = false;
-        }else if(hourNow >= hourSchedule && hourNow <= hourSchedule+1){
-            eligible = true;
-        }
-
-        return eligible;
-    }
-
-    private boolean isTodaySchedules(Schedule [] dataIn){
-
-        // lets check is it today the schedule
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-        Date dNow = new Date();
-
-        String dayFound;
-        String dayNow = sdf.format(dNow).toLowerCase();
-
-        boolean todayNeedToSign = false;
-
-        for(Schedule s: dataIn){
-           dayFound = s.getDay_schedule();
-           if(dayFound.equalsIgnoreCase(dayNow) && isTimeEligilbe(s.getTime_schedule())){
-
-               // the class_reg will be used for later reference
-               kelasSaatIni = s.getClass_registered();
-               todayNeedToSign = !isMarked(s.getTime_schedule());
-
-               break;
-           }
-        }
-
-        return todayNeedToSign;
-
-    }
-
-    private boolean isMarked(String timeIn){
-
-        // format time in is
-        // HH:mm
-
-        // ceritanya karena tidak ditemukan pada preference
-        // maka isMarked (false)
-        return false;
-    }
 
     private void addRecordHistory(String status){
         HistoryHelper hper = new HistoryHelper();
@@ -482,8 +422,10 @@ public class AttendanceActivity extends AppCompatActivity implements Navigator {
 
                     Schedule objects[] = gson.fromJson(mJson, Schedule[].class);
 
+                    ScheduleChecker engineChecker = new ScheduleChecker(this);
+
                     // check first is it eligible for today for signing in?
-                   if( isTodaySchedules(objects)) {
+                   if(engineChecker.isTodaySchedules(objects)) {
                        // activate the button
                        buttonAttendanceParaf.setVisibility(View.VISIBLE);
                        buttonAttendanceTakHadir.setVisibility(View.VISIBLE);

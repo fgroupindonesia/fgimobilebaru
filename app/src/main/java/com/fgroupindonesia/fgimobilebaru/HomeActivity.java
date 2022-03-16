@@ -66,9 +66,7 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
         textViewLogout = (TextView) findViewById(R.id.textViewLogout);
         textViewMessage = (TextView) findViewById(R.id.textViewMessage);
 
-
         textViewMessage.setBackgroundResource(R.color.yellow);
-
 
          imageUserProfileHome = (ImageView) findViewById(R.id.imageUserProfileHome);
 
@@ -367,7 +365,7 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
         } else if (jenisActivity == ACT_HISTORY) {
             intent = new Intent(this, HistoryActivity.class);
         } else if (jenisActivity == ACT_SERTIFIKASI) {
-        //    intent = new Intent(this, SertifikasiActivity.class);
+            intent = new Intent(this, SertifikasiActivity.class);
         } else if (jenisActivity == ACT_DOCUMENT) {
             intent = new Intent(this, DokumenActivity.class);
         } else if (jenisActivity == ACT_DESKTOP) {
@@ -376,7 +374,9 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
             intent = new Intent(this, BillActivity.class);
         } else if (jenisActivity == ACT_ABSENSI) {
             intent = new Intent(this, AttendanceActivity.class);
-        }
+        } else if (jenisActivity == ACT_KELAS) {
+          intent = new Intent(this, KelasActivity.class);
+      }
 
         if (intent != null && hasInternetConnection) {
             startActivity(intent);

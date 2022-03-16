@@ -18,7 +18,7 @@ import java.util.Locale;
 public class UIHelper {
 
     public static String getText(EditText element) {
-        if(element.getText()!=null) {
+        if(element != null) {
             return element.getText().toString();
         } else {
             return null;
@@ -26,7 +26,7 @@ public class UIHelper {
     }
 
     public static String getText(TextView element) {
-        if(element.getText()!=null) {
+        if(element != null) {
             return element.getText().toString();
         } else {
             return null;

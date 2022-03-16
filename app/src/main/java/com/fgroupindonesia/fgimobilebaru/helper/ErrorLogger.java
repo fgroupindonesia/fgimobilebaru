@@ -20,10 +20,13 @@ public class ErrorLogger {
         File file = null;
         try{
             File sdCard = Environment.getExternalStorageDirectory();
-            file = new File(sdCard.getAbsolutePath() + "/Android/data/com.fgroupindonesia.fgimobilebaru/");
+            file = new File(sdCard.getAbsolutePath() + "/Android/data/com.fgroupindonesia.fgimobilebaru");
             file.mkdirs();
             file = new File(file.getAbsolutePath() + "/error.log");
-            file.createNewFile();
+            if(!file.exists()) {
+                file.createNewFile();
+            }
+
             PrintStream ps = new PrintStream(file);
 
             Date c = Calendar.getInstance().getTime();
@@ -38,7 +41,7 @@ public class ErrorLogger {
             Log.e(TAG,Log.getStackTraceString(ex));
 
         } catch(Exception e){
-            //
+            System.err.println("Error tah " + e.getMessage());
         }
 
     }
