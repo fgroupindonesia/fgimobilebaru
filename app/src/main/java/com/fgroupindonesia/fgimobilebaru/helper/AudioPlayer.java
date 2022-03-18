@@ -1,7 +1,10 @@
 package com.fgroupindonesia.fgimobilebaru.helper;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.fgroupindonesia.fgimobilebaru.R;
 
@@ -9,6 +12,7 @@ import com.fgroupindonesia.fgimobilebaru.R;
 public class AudioPlayer {
 
     private static MediaPlayer mPlayer2;
+    private static AudioManager audioManager;
     public static final int DING_AUDIO = 1, VOICE_REQ_SENT = 2, VOUCHER_ORDER = 3,
             VOICE_UPDATED = 4, TIME_OUT = 5, HORRAY = 6,
             VOICE_60_MIN_CLASS = 7,
@@ -19,9 +23,14 @@ public class AudioPlayer {
             ALARM_01 = 12,
             ALARM_02 = 13,
             ALARM_03 = 14,
-            CLICK_SOUND = 15;
+            CLICK_SOUND = 15,
+            FAIL = 16;
 
-    public static void play(Context komp, int audioFileType) {
+    public static void play(AppCompatActivity komp, int audioFileType) {
+
+         audioManager = (AudioManager) komp.getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 20, 0);
+
         if (mPlayer2 != null) {
             mPlayer2.stop();
             mPlayer2 = null;
@@ -48,14 +57,16 @@ public class AudioPlayer {
             mPlayer2 = MediaPlayer.create(komp, R.raw.voice_kelas_dimulai_1jam);
         } else if (audioFileType == VOICE_PAYMENT_EACH_MONTH) {
             mPlayer2 = MediaPlayer.create(komp, R.raw.voice_tagihan_belum_dibayar);
-        }else if (audioFileType == ALARM_01) {
-			mPlayer2 = MediaPlayer.create(komp, R.raw.alarm_01);
-		}else if (audioFileType == ALARM_02) {
-			mPlayer2 = MediaPlayer.create(komp, R.raw.alarm_02);
-		}else if (audioFileType == ALARM_03) {
-			mPlayer2 = MediaPlayer.create(komp, R.raw.alarm_03);
-		}else if(audioFileType == CLICK_SOUND){
+        } else if (audioFileType == ALARM_01) {
+            mPlayer2 = MediaPlayer.create(komp, R.raw.alarm_01);
+        } else if (audioFileType == ALARM_02) {
+            mPlayer2 = MediaPlayer.create(komp, R.raw.alarm_02);
+        } else if (audioFileType == ALARM_03) {
+            mPlayer2 = MediaPlayer.create(komp, R.raw.alarm_03);
+        } else if (audioFileType == CLICK_SOUND) {
             mPlayer2 = MediaPlayer.create(komp, R.raw.clicked);
+        } else if (audioFileType == FAIL) {
+            mPlayer2 = MediaPlayer.create(komp, R.raw.fail);
         }
 
 

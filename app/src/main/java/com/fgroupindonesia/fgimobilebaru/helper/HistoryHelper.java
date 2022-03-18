@@ -11,8 +11,6 @@ import com.fgroupindonesia.fgimobilebaru.HomeActivity;
 import com.fgroupindonesia.fgimobilebaru.KelasActivity;
 import com.fgroupindonesia.fgimobilebaru.LoginActivity;
 import com.fgroupindonesia.fgimobilebaru.SettingsActivity;
-import com.fgroupindonesia.fgimobilebaru.object.Attendance;
-import com.fgroupindonesia.fgimobilebaru.object.User;
 
 public class HistoryHelper {
 

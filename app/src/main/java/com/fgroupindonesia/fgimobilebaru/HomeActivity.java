@@ -11,6 +11,7 @@ import com.fgroupindonesia.fgimobilebaru.helper.ScheduleSummary;
 import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 import com.fgroupindonesia.fgimobilebaru.helper.UIHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.URLReference;
+import com.fgroupindonesia.fgimobilebaru.helper.WarningStatusHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.WebRequest;
 import com.fgroupindonesia.fgimobilebaru.helper.shared.UserData;
 import com.fgroupindonesia.fgimobilebaru.object.Schedule;
@@ -45,9 +46,10 @@ import static com.fgroupindonesia.fgimobilebaru.helper.Keys.*;
 
 public class HomeActivity extends AppCompatActivity implements Navigator {
 
-
+    WarningStatusHelper wsh;
     TextView textViewLogout, textviewUsername, textViewMessage;
     WebRequest httpCall;
+    ImageView imageViewSertifikasi, imageViewKelas, imageViewDokumen;
     String filePropicName, usName, aToken;
 
     ImageView imageUserProfileHome;
@@ -55,6 +57,8 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
     LinearLayout linearDocument, linearOption, linearHistory, linearKelas, linearDesktop, linearTagihan,
             linearAbsensi, linearSertifikasi, linearLayoutUserProfile;
+
+    int warn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,10 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
         textViewLogout = (TextView) findViewById(R.id.textViewLogout);
         textViewMessage = (TextView) findViewById(R.id.textViewMessage);
 
+        imageViewSertifikasi = (ImageView) findViewById(R.id.imageViewHomeSertifikasi);
+        imageViewKelas = (ImageView) findViewById(R.id.imageViewHomeKelas) ;
+        imageViewDokumen = (ImageView) findViewById(R.id.imageViewHomeDokumen);
+
         textViewMessage.setBackgroundResource(R.color.yellow);
 
          imageUserProfileHome = (ImageView) findViewById(R.id.imageUserProfileHome);
@@ -75,6 +83,9 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
         usName = UserData.getPreferenceString(Keys.USERNAME);
         aToken = UserData.getPreferenceString(Keys.TOKEN);
+        warn = UserData.getPreferenceInt(WARNING_STATUS);
+
+      //  ShowDialog.message(this, "didapat warn " + warn);
 
         if (usName != null) {
             textviewUsername.setText(usName);
@@ -147,6 +158,21 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
     }
 
+    private void disableByWarningStatus(){
+
+        if(!wsh.isSafe()){
+            // cannot open dokumen, kelas, and sertifikat
+            imageViewSertifikasi.setImageResource(0);
+            imageViewSertifikasi.setImageResource(R.drawable.certificate_off);
+
+            imageViewDokumen.setImageResource(0);
+            imageViewDokumen.setImageResource(R.drawable.document_off);
+
+            imageViewKelas.setImageResource(0);
+            imageViewKelas.setImageResource(R.drawable.board_off);
+        }
+
+    }
 
     @Override
     public void nextActivity() {
@@ -186,7 +212,19 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
                     textViewMessage.setEllipsize(TextUtils.TruncateAt.MARQUEE);
                     textViewMessage.setSelected(true);
                     textViewMessage.setSingleLine(true);
-                    textViewMessage.setText(UIHelper.replaceAllEnglishToIndonesian(schSummary.getText()));
+
+                   wsh = new WarningStatusHelper(warn);
+
+                    if(wsh.isSafe()){
+                            // if no warning found
+                        textViewMessage.setText(UIHelper.replaceAllEnglishToIndonesian(schSummary.getText()));
+
+                    }else{
+                        textViewMessage.setTextColor(Color.WHITE);
+                        textViewMessage.setBackgroundResource(R.color.red);
+                        textViewMessage.setText(wsh.getStatus() + " : Please contact admin!");
+                        disableByWarningStatus();
+                    }
 
                 }
             } else if (!RespondHelper.isValidRespond(respond)) {
@@ -348,49 +386,74 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
     private void nextActivity(int jenisActivity) {
 
-        // only if the settings was toggled ON
-        if(UserData.getPreferenceBoolean(CLICK_SOUNDS)) {
-            AudioPlayer.play(this, AudioPlayer.CLICK_SOUND);
-        }
 
         Intent intent = null;
         boolean needRefreshLater = false;
+        boolean canOpen = false;
 
       if (jenisActivity == ACT_OPTIONS) {
             intent = new Intent(this, SettingsActivity.class);
             needRefreshLater = true;
+            canOpen = true;
         } else if (jenisActivity == ACT_USER_PROFILE) {
             intent = new Intent(this, UserProfileActivity.class);
             needRefreshLater = true;
+            canOpen = true;
         } else if (jenisActivity == ACT_HISTORY) {
             intent = new Intent(this, HistoryActivity.class);
+            canOpen = true;
         } else if (jenisActivity == ACT_SERTIFIKASI) {
             intent = new Intent(this, SertifikasiActivity.class);
+            canOpen = wsh.isSafe();
         } else if (jenisActivity == ACT_DOCUMENT) {
             intent = new Intent(this, DokumenActivity.class);
+          canOpen = wsh.isSafe();
         } else if (jenisActivity == ACT_DESKTOP) {
+          canOpen = true;
             intent = new Intent(this, DesktopActivity.class);
         } else if (jenisActivity == ACT_TAGIHAN) {
+          canOpen = true;
             intent = new Intent(this, BillActivity.class);
         } else if (jenisActivity == ACT_ABSENSI) {
+          canOpen = true;
             intent = new Intent(this, AttendanceActivity.class);
         } else if (jenisActivity == ACT_KELAS) {
+          canOpen = wsh.isSafe();
           intent = new Intent(this, KelasActivity.class);
       }
 
-        if (intent != null && hasInternetConnection) {
-            startActivity(intent);
+        if (intent != null && hasInternetConnection && canOpen) {
 
-            // HomeActivity ended here and will be re-created from UserProfile
-            // or from Settings activities
-            // meanwhile other activities just no need to recreate
-            if(needRefreshLater) {
-                finish();
+            // only if the settings was toggled ON
+            if(UserData.getPreferenceBoolean(CLICK_SOUNDS)) {
+                AudioPlayer.play(this, AudioPlayer.CLICK_SOUND);
             }
+
+                startActivity(intent);
+
+                // HomeActivity ended here and will be re-created from UserProfile
+                // or from Settings activities
+                // meanwhile other activities just no need to recreate
+                if(needRefreshLater) {
+                    finish();
+                }
+
         }else{
             // if no internet
             // thus, we dont go anywhere
-            warningNoInternet();
+            if(hasInternetConnection==false) {
+                warningNoInternet();
+            }
+
+            if(!canOpen){
+
+                // only if the settings was toggled ON
+                if(UserData.getPreferenceBoolean(CLICK_SOUNDS)) {
+                    AudioPlayer.play(this, AudioPlayer.FAIL);
+                }
+
+                ShowDialog.message(this, "No access!");
+            }
         }
 
     }
@@ -405,10 +468,6 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
     public void openAbsensi(View v) {
         nextActivity(ACT_ABSENSI);
-    }
-
-    public void openPembayaran(View v) {
-        nextActivity((ACT_PEMBAYARAN));
     }
 
     public void openUserProfile(View v) {
@@ -432,7 +491,8 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
     }
 
     public void openSertifikasi(View v) {
-        nextActivity(ACT_SERTIFIKASI);
+            nextActivity(ACT_SERTIFIKASI);
+
     }
 
 

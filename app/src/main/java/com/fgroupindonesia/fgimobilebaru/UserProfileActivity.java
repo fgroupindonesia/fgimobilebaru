@@ -25,6 +25,7 @@ import com.fgroupindonesia.fgimobilebaru.helper.UIHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.URLReference;
 import com.fgroupindonesia.fgimobilebaru.helper.WebRequest;
 import com.fgroupindonesia.fgimobilebaru.helper.shared.UserData;
+import com.fgroupindonesia.fgimobilebaru.object.User;
 
 import org.json.JSONObject;
 
@@ -40,6 +41,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
 
     ImageView imageUserProfile;
     String picturePath, idText, filePropicName;
+
+    User dataUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +88,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
 
     public void downloadPictureAPI() {
 
-       // UIAction.ACT_API_CURRENT_CALL = OPSAction.ACT_API_USERPROFILE_DOWNLOAD_PICTURE;
+        // UIAction.ACT_API_CURRENT_CALL = OPSAction.ACT_API_USERPROFILE_DOWNLOAD_PICTURE;
 
         WebRequest httpCall = new WebRequest(this, this);
         //httpCall.addData("token", UserData.getPreferenceString(KeyPref.TOKEN));
@@ -114,6 +117,9 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
         httpCall.addData("address", UIHelper.getText(editTextAddress));
         httpCall.addData("tmv_id", UIHelper.getText(editTextTmvID));
         httpCall.addData("tmv_pass", UIHelper.getText(editTextTmvPass));
+        // this is the warning status obtained from the server
+        httpCall.addData("warning_status", String.valueOf(dataUser.getWarning_status()));
+
 
         if (picturePath != null) {
             httpCall.addFile("propic", new File(picturePath));
@@ -156,8 +162,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
                 //ShowDialog.message(UserProfileActivity.this, picturePath);
 
                 // lets convert it to png to make it save for any server
-                picturePath = ImageHelper.convertToSmallJPG(this, picturePath,"propic");
-
+                picturePath = ImageHelper.convertToSmallJPG(this, picturePath, "propic");
 
 
             } catch (Exception ex) {
@@ -166,7 +171,6 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
 
         }
     }
-
 
 
     public void getDataAPI() {
@@ -188,7 +192,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
     @Override
     public void nextActivity() {
 
-        Intent intenCaller  = new Intent(this, HomeActivity.class);
+        Intent intenCaller = new Intent(this, HomeActivity.class);
         startActivity(intenCaller);
 
     }
@@ -199,7 +203,30 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
         finish();
     }
 
-        @Override
+    private User extractFromJSON(JSONObject jo) {
+        User user = new User();
+
+        try {
+            user.setId(jo.getInt("id"));
+            user.setPropic(jo.getString("propic"));
+
+            user.setUsername(jo.getString("username"));
+            user.setPass(jo.getString("pass"));
+            user.setEmail(jo.getString("email"));
+            user.setMobile(jo.getString("mobile"));
+            user.setAddress(jo.getString("address"));
+            user.setTmv_id(jo.getString("tmv_id"));
+            user.setTmv_pass(jo.getString("tmv_pass"));
+            user.setWarning_status(jo.getInt("warning_status"));
+
+        } catch (Exception ex) {
+            user = null;
+        }
+
+        return user;
+    }
+
+    @Override
     public void onSuccess(String urlTarget, String respond) {
 
         try {
@@ -215,24 +242,26 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
                     linearUserProfileLoading.setVisibility(View.GONE);
                     scrollViewUserProfile.setVisibility(View.VISIBLE);
 
-                    idText = jo.getString("id");
-                    filePropicName = jo.getString("propic");
+                    dataUser = extractFromJSON(jo);
 
-                    editTextUsername.setText(jo.getString("username"));
-                    editTextPassword.setText(jo.getString("pass"));
-                    editTextEmail.setText(jo.getString("email"));
-                    editTextMobile.setText(jo.getString("mobile"));
-                    editTextAddress.setText(jo.getString("address"));
-                    editTextTmvID.setText(jo.getString("tmv_id"));
-                    editTextTmvPass.setText(jo.getString("tmv_pass"));
+                    idText = String.valueOf(dataUser.getId());
+                    filePropicName = dataUser.getPropic();
+
+                    editTextUsername.setText(dataUser.getUsername());
+                    editTextPassword.setText(dataUser.getPass());
+                    editTextEmail.setText(dataUser.getEmail());
+                    editTextMobile.setText(dataUser.getMobile());
+                    editTextAddress.setText(dataUser.getAddress());
+                    editTextTmvID.setText(dataUser.getTmv_id());
+                    editTextTmvPass.setText(dataUser.getTmv_pass());
 
                     // calling the image download
                     downloadPictureAPI();
 
                 } else if (urlTarget.equalsIgnoreCase(URLReference.UserUpdate)) {
                     // back to the dashboard (home)
-                   nextActivity();
-                   finish();
+                    nextActivity();
+                    finish();
                 }
 
                 // the invalid output is sometimes for non-POST method

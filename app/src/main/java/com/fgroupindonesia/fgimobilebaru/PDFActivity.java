@@ -10,126 +10,127 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+
 import android.widget.ImageView;
 
+import com.fgroupindonesia.fgimobilebaru.helper.ErrorLogger;
 import com.fgroupindonesia.fgimobilebaru.helper.Keys;
 import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
+import com.fgroupindonesia.fgimobilebaru.helper.WhatsappSender;
 
 import java.io.File;
 import java.net.URI;
 
 public class PDFActivity extends AppCompatActivity {
 
-    ImageView pdfView;
+    SubsamplingScaleImageView pdfView;
 
-    float x1, y1, t1, x2 , y2, t2;
-    int CLICK_DURATION = 200;
+    ImageView imageViewNext, imageViewBack;
 
     File file;
 
-    int currentIndex =0;
-     int pageCount;
+    int currentIndex = 0;
+    int pageCount = -1;
     ParcelFileDescriptor fileDescriptor = null;
+    PdfRenderer pdfRenderer = null;
+    PdfRenderer.Page rendererPage = null;
+   String titleNa;
 
-    private void applyingSwipeEffect() {
+    public void next(View v) {
 
-
-        pdfView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-
-
-                switch (event.getAction()) {
-
-                    case MotionEvent.ACTION_DOWN:
-                        x1 = event.getX();
-                        y1 = event.getY();
-                        t1 = System.currentTimeMillis();
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        x2 = event.getX();
-                        y2 = event.getY();
-                        t2 = System.currentTimeMillis();
-
-                        try{
-                            if (x1 == x2 && y1 == y2 && (t2 - t1) < CLICK_DURATION) {
-                                ShowDialog.message(PDFActivity.this, "Click");
-                            } else if ((t2 - t1) >= CLICK_DURATION) {
-                                ShowDialog.message(PDFActivity.this, "Long Click");
-                            } else if (x1 > x2) {
-                                next();
-                                renderPage();
-                                ShowDialog.message(PDFActivity.this, "Left");
-                            } else if (x2 > x1) {
-                                back();
-                                renderPage();
-                                ShowDialog.message(PDFActivity.this, "Right");
-                            }
-                        } catch (Exception e){
-                            ShowDialog.message(PDFActivity.this, "error while swiping...");
-                            ShowDialog.message(PDFActivity.this, e.getMessage());
-                        }
+        if (currentIndex != 0) {
+            currentIndex--;
+        renderPage();
+        }
 
 
+    }
 
-                        return true;
-                }
+    public void shareToWhatsapp(View v){
 
-                return false;
+        titleNa = file.getName();
+        new WhatsappSender(this).sendFileToWhatsApp(file, titleNa);
+
+    }
+
+    public void back(View v) {
+
+        if (currentIndex < pageCount) {
+            currentIndex++;
+            renderPage();
+        }
+
+
+    }
+
+    private void toggleTheBackNextButtons(){
+
+        if(pageCount==1){
+            imageViewNext.setVisibility(View.INVISIBLE);
+            imageViewBack.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
+    private void renderPage()  {
+
+
+        try{
+            fileDescriptor = ParcelFileDescriptor.open(
+                    file, ParcelFileDescriptor.MODE_READ_ONLY);
+
+
+            pdfRenderer = new PdfRenderer(fileDescriptor);
+
+            if(pageCount==-1) {
+                pageCount = pdfRenderer.getPageCount();
+
+                // showing the next and back button
+                // based upon the page count total found
+                toggleTheBackNextButtons();
+
             }
 
-        });
+            rendererPage = pdfRenderer.openPage(currentIndex);
 
-    }
+            int rendererPageWidth = rendererPage.getWidth();
+            int rendererPageHeight = rendererPage.getHeight();
+            Bitmap bitmap = Bitmap.createBitmap(
+                    rendererPageWidth,
+                    rendererPageHeight,
+                    Bitmap.Config.ARGB_8888);
+            rendererPage.render(bitmap, null, null,
+                    PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
 
-    private void back(){
+            if (bitmap == null) {
+                // Important: the destination bitmap must be ARGB (not RGB).
+                int newWidth = (int) (getResources().getDisplayMetrics().densityDpi * rendererPage.getWidth() / 72);
+                int newHeight = (int) (getResources().getDisplayMetrics().densityDpi * rendererPage.getHeight() / 72);
+                bitmap = Bitmap.createBitmap(
+                        newWidth,
+                        newHeight,
+                        Bitmap.Config.ARGB_8888);
+            }
 
-        if(currentIndex!=0){
-            currentIndex--;
+            bitmap.eraseColor(0xFFFFFFFF);
+            rendererPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+            // We are ready to show the Bitmap to user.
+            pdfView.resetScaleAndCenter();
+            pdfView.setImage(ImageSource.cachedBitmap(bitmap));
+
+            rendererPage.close();
+            pdfRenderer.close();
+            fileDescriptor.close();
+
+        } catch (Exception n){
+            ShowDialog.message(this, "something " + n.getMessage());
+            ErrorLogger.write(n);
         }
 
 
-
-    }
-
-    private void next(){
-
-        if(currentIndex<pageCount){
-            currentIndex++;
-        }
-
-
-    }
-
-    private void renderPage() throws Exception {
-
-        fileDescriptor = ParcelFileDescriptor.open(
-                file, ParcelFileDescriptor.MODE_READ_ONLY);
-
-        PdfRenderer pdfRenderer  = new PdfRenderer(fileDescriptor);
-
-        pageCount = pdfRenderer.getPageCount();
-
-        //Display page 0
-        PdfRenderer.Page rendererPage = pdfRenderer.openPage(currentIndex);
-        int rendererPageWidth = rendererPage.getWidth();
-        int rendererPageHeight = rendererPage.getHeight();
-        Bitmap bitmap = Bitmap.createBitmap(
-                rendererPageWidth,
-                rendererPageHeight,
-                Bitmap.Config.ARGB_8888);
-        rendererPage.render(bitmap, null, null,
-                PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-
-        pdfView.setImageBitmap(bitmap);
-        rendererPage.close();
-
-        pdfRenderer.close();
-        fileDescriptor.close();
     }
 
     @Override
@@ -137,32 +138,31 @@ public class PDFActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf);
 
-        pdfView = (ImageView)findViewById(R.id.pdfview);
+        pdfView = (SubsamplingScaleImageView) findViewById(R.id.pdfview);
 
-
+        imageViewNext = (ImageView ) findViewById(R.id.imageViewNext);
+        imageViewBack = (ImageView) findViewById(R.id.imageViewBack);
 
         String namaDicari = getIntent().getStringExtra(Keys.FILE_PDF_TARGET);
-try{
-    Uri uri = null;
-    // this is an absolute full completed file path
-   file = new File(namaDicari);
-    if (Build.VERSION.SDK_INT < 24) {
-        uri = Uri.fromFile(file);
-    } else {
-        uri = Uri.parse(file.getPath()); // My work-around for SDKs up to 29.
-    }
+        try {
+            Uri uri = null;
+            // this is an absolute full completed file path
+            file = new File(namaDicari);
+            if (Build.VERSION.SDK_INT < 24) {
+                uri = Uri.fromFile(file);
+            } else {
+                uri = Uri.parse(file.getPath()); // My work-around for SDKs up to 29.
+            }
 
-    ShowDialog.message(this, "sudah betul " + uri);
+            ShowDialog.message(this, "sudah betul " + uri);
 
 
+            //min. API Level 21
+            renderPage();
 
-    //min. API Level 21
-    renderPage();
-    applyingSwipeEffect();
-
-} catch (Exception e){
-    ShowDialog.message(this, "error inside PDF Activity!");
-}
+        } catch (Exception e) {
+            ShowDialog.message(this, "error inside PDF Activity!");
+        }
 
     }
 }

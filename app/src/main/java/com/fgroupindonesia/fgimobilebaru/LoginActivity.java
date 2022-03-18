@@ -28,7 +28,6 @@ import com.fgroupindonesia.fgimobilebaru.helper.WebRequest;
 import com.fgroupindonesia.fgimobilebaru.helper.WhatsappSender;
 import com.fgroupindonesia.fgimobilebaru.helper.shared.UserData;
 import com.fgroupindonesia.fgimobilebaru.object.Token;
-import com.fgroupindonesia.fgimobilebaru.object.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -178,6 +177,9 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
 
                     Token objectToken  = objectG.fromJson(mJson, Token.class);
 
+                  //  ShowDialog.message(this, "statusna " + objectToken.getWarning_status());
+
+                    UserData.savePreference(Keys.WARNING_STATUS, objectToken.getWarning_status());
                     UserData.savePreference(Keys.USERNAME, objectToken.getUsername());
                     UserData.savePreference(Keys.TOKEN, objectToken.getToken());
 

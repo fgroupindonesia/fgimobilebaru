@@ -4,10 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -17,32 +15,24 @@ import android.widget.TextView;
 import com.fgroupindonesia.fgimobilebaru.helper.ArrayHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.Keys;
 import com.fgroupindonesia.fgimobilebaru.helper.Navigator;
+import com.fgroupindonesia.fgimobilebaru.helper.NavigatorFetch;
 import com.fgroupindonesia.fgimobilebaru.helper.RespondHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 import com.fgroupindonesia.fgimobilebaru.helper.URLReference;
+import com.fgroupindonesia.fgimobilebaru.helper.WebFetch;
 import com.fgroupindonesia.fgimobilebaru.helper.WebRequest;
+import com.fgroupindonesia.fgimobilebaru.helper.WhatsappSender;
 import com.fgroupindonesia.fgimobilebaru.helper.adapter.SertifikatArrayAdapter;
 import com.fgroupindonesia.fgimobilebaru.helper.shared.UserData;
 import com.fgroupindonesia.fgimobilebaru.object.Sertifikat;
 import com.google.gson.Gson;
-import com.tonyodev.fetch2.Download;
-import com.tonyodev.fetch2.Error;
 import com.tonyodev.fetch2.Fetch;
 import com.tonyodev.fetch2.FetchConfiguration;
-import com.tonyodev.fetch2.FetchListener;
-import com.tonyodev.fetch2.NetworkType;
-import com.tonyodev.fetch2.Priority;
-import com.tonyodev.fetch2.Request;
-import com.tonyodev.fetch2core.DownloadBlock;
-import com.tonyodev.fetch2core.Func;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
-public class SertifikasiActivity extends AppCompatActivity implements Navigator {
+public class SertifikasiActivity extends AppCompatActivity implements Navigator, NavigatorFetch {
 
     private Fetch fetch;
     TextView textViewSertifikatTotal;
@@ -53,6 +43,10 @@ public class SertifikasiActivity extends AppCompatActivity implements Navigator 
 
     LinearLayout linearLayoutLoading, linearLayoutSertifikat, linearLayoutNoEntry;
     String usName, aToken, urlDownload, fileName;
+
+    // for several download ProgressBars
+    ProgressBar prgBar01, prgBar02;
+    ImageView imageAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,132 +123,31 @@ public class SertifikasiActivity extends AppCompatActivity implements Navigator 
 
     }
 
-    public void downloadFile(final ProgressBar prgBar, final ProgressBar prgBar2, final ImageView imageAccess, String fileName, String alamatTujuan ){
+
+    public void downloadFile(ImageView img, ProgressBar prgBar1, ProgressBar prgBar2, String fileName, String alamatTujuan ){
 
         // ShowDialog.message(this, "testing download " + alamatTujuan);
-        if(prgBar!=null) {
-            prgBar.setVisibility(View.VISIBLE);
-            prgBar2.setVisibility(View.VISIBLE);
-        }
+        // self referencing for future usage after success callback returned
+        prgBar01 = prgBar1;
+        prgBar02 = prgBar2;
 
-        /*
-        WebRequest httpCall = new WebRequest(this, this);
-        httpCall.setDownloadState(true);
-        httpCall.setProgressBar(prgBar);
-        httpCall.setWaitState(true);
-        // we should put the filename over here
-        // to make android know what filename to be saved
-        httpCall.addData("filename", fileName);
+        imageAccess = img;
+
+        WebFetch httpCall = new WebFetch(this, this);
+        httpCall.setFileNameToBeSaved(fileName);
         httpCall.setTargetURL(alamatTujuan);
-        httpCall.setRequestMethod(WebRequest.GET_METHOD);
-        httpCall.execute();
-        */
+        httpCall.executeFetch();
 
         // store temporarily
         urlDownload = alamatTujuan;
 
-        String endPath = Environment.getExternalStorageDirectory()
-                + "/Android/data/"+ this.getApplicationContext().getPackageName() + "/files/" + fileName;
+        //ShowDialog.message(this, "Downloading from Fetcher");
 
-        final Request request = new Request(alamatTujuan, endPath);
-        request.setPriority(Priority.HIGH);
-        request.setNetworkType(NetworkType.ALL);
-        request.addHeader("clientKey", "SD78DF93_3947&MVNGHE1WONG");
+    }
 
-        FetchListener fetchListener = new FetchListener() {
-            @Override
-            public void onWaitingNetwork(@NotNull Download download) {
 
-            }
-
-            @Override
-            public void onStarted(@NotNull Download download, @NotNull List<? extends DownloadBlock> list, int i) {
-
-            }
-
-            @Override
-            public void onError(@NotNull Download download, @NotNull Error error, @Nullable Throwable throwable) {
-
-            }
-
-            @Override
-            public void onDownloadBlockUpdated(@NotNull Download download, @NotNull DownloadBlock downloadBlock, int i) {
-
-            }
-
-            @Override
-            public void onAdded(@NotNull Download download) {
-
-            }
-
-            @Override
-            public void onQueued(@NotNull Download download, boolean waitingOnNetwork) {
-                if (request.getId() == download.getId()) {
-                    //showDownloadInList(download);
-                }
-            }
-
-            @Override
-            public void onCompleted(@NotNull Download download) {
-
-                prgBar2.setVisibility(View.GONE);
-                prgBar.setVisibility(View.GONE);
-
-                imageAccess.setImageResource(R.drawable.checklist);
-                imageAccess.setTag("checklist");
-                imageAccess.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onProgress(@NotNull Download download, long etaInMilliSeconds, long downloadedBytesPerSecond) {
-                if (request.getId() == download.getId()) {
-                    //updateDownload(download, etaInMilliSeconds);
-                }
-                int progress = download.getProgress();
-            }
-
-            @Override
-            public void onPaused(@NotNull Download download) {
-
-            }
-
-            @Override
-            public void onResumed(@NotNull Download download) {
-
-            }
-
-            @Override
-            public void onCancelled(@NotNull Download download) {
-
-            }
-
-            @Override
-            public void onRemoved(@NotNull Download download) {
-
-            }
-
-            @Override
-            public void onDeleted(@NotNull Download download) {
-
-            }
-        };
-
-        fetch.addListener(fetchListener);
-
-        fetch.enqueue(request, new Func<Request>() {
-            @Override
-            public void call(@NotNull Request updatedRequest) {
-                //Request was successfully enqueued for download.
-            }
-        }, new Func<Error>() {
-            @Override
-            public void call(@NotNull Error error) {
-                //An error occurred enqueuing the request.
-            }
-        });
-
-        ShowDialog.message(this, "Downloading from " + urlDownload);
-
+    public void shareTo(File fileIn, String titleNa){
+        new WhatsappSender(this).sendFileToWhatsApp(fileIn, titleNa);
     }
 
     // additional onclick event for the listview instead of the icon clicked
@@ -349,6 +242,22 @@ public class SertifikasiActivity extends AppCompatActivity implements Navigator 
         } catch (Exception ex) {
             ShowDialog.message(this, "error on " + ex.getMessage());
             ex.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onSuccessByFetch(String urlTarget, String result) {
+        // this is a call back of completed download by 3rd party fetch library
+
+        if(urlTarget.contains(urlDownload)){
+            prgBar01.setVisibility(View.GONE);
+            prgBar02.setVisibility(View.GONE);
+
+            imageAccess.setImageResource(R.drawable.checklist);
+            imageAccess.setTag("checklist");
+            imageAccess.setVisibility(View.VISIBLE);
+
         }
 
     }

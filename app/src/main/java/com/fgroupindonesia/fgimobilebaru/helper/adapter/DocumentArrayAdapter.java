@@ -97,7 +97,7 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
 
     private void openingFile(String filename) {
         String namaDicari = new File(getPath(), filename).getAbsolutePath();
-        ShowDialog.message(getActivity(), "lokasi ke " + namaDicari);
+        //ShowDialog.message(getActivity(), "lokasi ke " + namaDicari);
 
         if(filename.contains("pdf")){
             dokAct.setCurrentFileName(namaDicari);
@@ -109,15 +109,15 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
         }
     }
 
-    private void downloadFile(ProgressBar prgBar1, ProgressBar prgBar2, String fileNa, String urlNa) {
-        ((DokumenActivity) getActivity()).downloadFile(prgBar1, prgBar2, fileNa, urlNa);
-        ShowDialog.message(getActivity(),"downloading...");
+    private void downloadFile(ImageView img, ProgressBar prgBar1, ProgressBar prgBar2, String fileNa, String urlNa) {
+        ((DokumenActivity) getActivity()).downloadFile(img, prgBar1, prgBar2, fileNa, urlNa);
+        //ShowDialog.message(getActivity(),"downloading...");
     }
 
 
     private void shareFile(String fileNa, String titleNa) {
         ((DokumenActivity) getActivity()).shareTo(getFilePath(fileNa), titleNa);
-        ShowDialog.message(getActivity(),"di share...");
+       // ShowDialog.message(getActivity(),"di share...");
     }
 
     public void openingFile(int post, View v) {
@@ -134,7 +134,7 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
                 // downloading...
                 //ShowDialog.message(getActivity(), "trying to download " + d.getUrl());
                 // with progressbar shown
-                downloadFile(vh.progressBarPercentage, vh.progressBarDokumen, d.getFilename(), d.getUrl());
+                downloadFile(vh.imageAccess, vh.progressBarPercentage, vh.progressBarDokumen, d.getFilename(), d.getUrl());
                 showAnimatedDownload(vh,true);
             } else if (jenisIcon.contains("checklist")) {
                 // opening
@@ -225,7 +225,7 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
 
                     if (tag.contains("download")) {
                         // we are required to download
-                        downloadFile(viewHolder.progressBarDokumen, viewHolder.progressBarPercentage, dataModel.getFilename(), dataModel.getUrl());
+                        downloadFile(viewHolder.imageAccess, viewHolder.progressBarDokumen, viewHolder.progressBarPercentage, dataModel.getFilename(), dataModel.getUrl());
                         showAnimatedDownload(viewHolder,true);
                     } else if (tag.contains("checklist")) {
                         // we may directly open the file locally

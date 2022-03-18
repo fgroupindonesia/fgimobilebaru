@@ -9,30 +9,6 @@ public class User {
         this.id = id;
     }
 
-    public int getGender() {
-        return gender;
-    }
-
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
-
-    public int getAlive() {
-        return alive;
-    }
-
-    public void setAlive(int alive) {
-        this.alive = alive;
-    }
-
-    public int getMembership() {
-        return membership;
-    }
-
-    public void setMembership(int membership) {
-        this.membership = membership;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -57,30 +33,6 @@ public class User {
         this.email = email;
     }
 
-    public String getHome_address() {
-        return home_address;
-    }
-
-    public void setHome_address(String home_address) {
-        this.home_address = home_address;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public String getFull_name() {
-        return full_name;
-    }
-
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
-    }
-
     public String getPropic() {
         return propic;
     }
@@ -89,8 +41,64 @@ public class User {
         this.propic = propic;
     }
 
-    int id, gender, alive, membership;
-    String username, pass, email, home_address, contact, full_name, propic;
+    int id;
+    private int access_level;
+    private int warning_status;
+    String username;
+    String pass;
+    String email;
+    private String address;
+    private String mobile;
+    private String tmv_id;
+    private String tmv_pass;
+    String propic;
 
 
+    public int getAccess_level() {
+        return access_level;
+    }
+
+    public void setAccess_level(int access_level) {
+        this.access_level = access_level;
+    }
+
+    public int getWarning_status() {
+        return warning_status;
+    }
+
+    public void setWarning_status(int warning_status) {
+        this.warning_status = warning_status;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getTmv_id() {
+        return tmv_id;
+    }
+
+    public void setTmv_id(String tmv_id) {
+        this.tmv_id = tmv_id;
+    }
+
+    public String getTmv_pass() {
+        return tmv_pass;
+    }
+
+    public void setTmv_pass(String tmv_pass) {
+        this.tmv_pass = tmv_pass;
+    }
 }

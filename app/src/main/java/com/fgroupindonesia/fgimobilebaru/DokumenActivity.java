@@ -1,28 +1,22 @@
 package com.fgroupindonesia.fgimobilebaru;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.StrictMode;
 import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fgroupindonesia.fgimobilebaru.helper.ArrayHelper;
-import com.fgroupindonesia.fgimobilebaru.helper.FileOpener;
 import com.fgroupindonesia.fgimobilebaru.helper.Keys;
 import com.fgroupindonesia.fgimobilebaru.helper.Navigator;
 import com.fgroupindonesia.fgimobilebaru.helper.NavigatorFetch;
@@ -31,28 +25,18 @@ import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 import com.fgroupindonesia.fgimobilebaru.helper.TextChangedListener;
 import com.fgroupindonesia.fgimobilebaru.helper.UIHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.URLReference;
+import com.fgroupindonesia.fgimobilebaru.helper.WebFetch;
 import com.fgroupindonesia.fgimobilebaru.helper.WebRequest;
+import com.fgroupindonesia.fgimobilebaru.helper.WhatsappSender;
 import com.fgroupindonesia.fgimobilebaru.helper.adapter.DocumentArrayAdapter;
 import com.fgroupindonesia.fgimobilebaru.helper.shared.UserData;
 import com.fgroupindonesia.fgimobilebaru.object.Document;
 import com.google.gson.Gson;
-import com.tonyodev.fetch2.Download;
-import com.tonyodev.fetch2.Error;
 import com.tonyodev.fetch2.Fetch;
 import com.tonyodev.fetch2.FetchConfiguration;
-import com.tonyodev.fetch2.FetchListener;
-import com.tonyodev.fetch2.NetworkType;
-import com.tonyodev.fetch2.Priority;
-import com.tonyodev.fetch2.Request;
-import com.tonyodev.fetch2core.DownloadBlock;
-import com.tonyodev.fetch2core.Func;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class DokumenActivity extends AppCompatActivity implements Navigator, NavigatorFetch {
 
@@ -69,6 +53,7 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
 
     // for several download ProgressBars
     ProgressBar prgBar01, prgBar02;
+    ImageView imageAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,30 +100,9 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
 
     }
 
-    private Uri uriFromFile(AppCompatActivity cont, File file)  {
-            return Uri.fromFile(file);
-    }
 
     public void shareTo(File fileIn, String titleNa){
-
-        String name = fileIn.getName().toLowerCase();
-
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM,  uriFromFile(this,fileIn));
-        shareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if(name.contains("pdf")) {
-            shareIntent.setType("application/pdf");
-        }else if(name.contains("jpg") || name.contains("jpeg")){
-            shareIntent.setType("image/jpeg");
-        }else if(name.contains("ppt") || name.contains("pptx")){
-            shareIntent.setType("application/vnd.ms-powerpoint");
-        }
-
-        startActivity(Intent.createChooser(shareIntent, "Share.." + titleNa));
-
+        new WhatsappSender(this).sendFileToWhatsApp(fileIn, titleNa);
     }
 
     private void resetItemChecked(){
@@ -172,23 +136,23 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
     }
 
 
-    public void downloadFile(ProgressBar prgBar1, ProgressBar prgBar2, String fileName, String alamatTujuan ){
+    public void downloadFile(ImageView img, ProgressBar prgBar1, ProgressBar prgBar2, String fileName, String alamatTujuan ){
 
         // ShowDialog.message(this, "testing download " + alamatTujuan);
         // self referencing for future usage after success callback returned
         prgBar01 = prgBar1;
         prgBar02 = prgBar2;
+        imageAccess = img;
 
-        WebFetch httpCall = new WebFetch(alamatTujuan, fileName);
-        httpCall.setActivity(this);
-        httpCall.setNavigatorFetch(this);
-        httpCall.prepareFetchLibrary();
+        WebFetch httpCall = new WebFetch(this, this);
+        httpCall.setFileNameToBeSaved(fileName);
+        httpCall.setTargetURL(alamatTujuan);
         httpCall.executeFetch();
 
         // store temporarily
         urlDownload = alamatTujuan;
 
-        ShowDialog.message(this, "Downloading from Fetcher");
+       // ShowDialog.message(this, "Downloading from Fetcher");
 
     }
 
@@ -375,6 +339,11 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
         if(urlTarget.contains(urlDownload)){
             prgBar01.setVisibility(View.GONE);
             prgBar02.setVisibility(View.GONE);
+
+            imageAccess.setImageResource(R.drawable.checklist);
+            imageAccess.setTag("checklist");
+            imageAccess.setVisibility(View.VISIBLE);
+
         }
 
     }
