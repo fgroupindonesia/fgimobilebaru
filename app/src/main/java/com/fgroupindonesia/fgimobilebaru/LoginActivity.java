@@ -183,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
                     UserData.savePreference(Keys.USERNAME, objectToken.getUsername());
                     UserData.savePreference(Keys.TOKEN, objectToken.getToken());
                     UserData.savePreference(Keys.SIGNED_IN, true);
-                    
+
                     // add the history on server side
                     addRecordHistory(objectToken.getUsername(), objectToken.getToken());
 
