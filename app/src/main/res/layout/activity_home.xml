@@ -99,11 +99,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_marginTop="7dp"
+        android:layout_weight="3"
         android:divider="@drawable/spacing"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="vertical"
         android:showDividers="middle">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -123,18 +125,16 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:src="@drawable/attendance" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/text_title_absensi"
                     android:textColor="@android:color/background_light"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -147,16 +147,17 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:src="@drawable/options" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
                     android:text="@string/text_title_opsi"
                     android:textColor="@android:color/background_light"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -170,16 +171,17 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:src="@drawable/history" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
                     android:text="@string/text_title_history"
                     android:textColor="@android:color/background_light"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -195,18 +197,16 @@
 
                     android:id="@+id/imageViewHomeKelas"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:src="@drawable/board" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/text_title_kelas"
                     android:textColor="@android:color/background_light"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -237,7 +237,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_title_sertifikasi"
                     android:textColor="@android:color/background_light"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -263,7 +263,7 @@
                     android:layout_weight="1"
                     android:text="@string/text_title_document"
                     android:textColor="@android:color/background_light"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -286,7 +286,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_title_desktop"
                     android:textColor="@android:color/background_light"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -311,11 +311,114 @@
                     android:layout_weight="1"
                     android:text="@string/text_title_tagihan"
                     android:textColor="@android:color/background_light"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutGmaps"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="openMaps"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/gmaps" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_title_google_maps"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ask" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/text_title_document"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ask" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_title_desktop"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ask" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/text_title_tagihan"
+                    android:textColor="@android:color/background_light"
                     android:textSize="18sp" />
 
             </LinearLayout>
 
         </LinearLayout>
+
 
     </LinearLayout>
 

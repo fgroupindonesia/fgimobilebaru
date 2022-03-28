@@ -28,7 +28,9 @@ public class WarningStatusHelper {
             case 3:
                 status = Keys.STATUS_WARN_EXERCISE;
                 break;
-
+            case 4:
+                status = Keys.STATUS_WARN_MULTI_ATTENDANCE;
+                break;
         }
 
         return status;

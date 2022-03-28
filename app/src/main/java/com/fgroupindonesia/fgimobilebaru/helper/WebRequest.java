@@ -75,7 +75,7 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 
 	 private AppCompatActivity myContext;
 	 private boolean multipartform = false;
-	 private static boolean waitState = false;
+	 private boolean waitState = false;
 
 
 
@@ -124,7 +124,7 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 		mPDialog = progBar;
 	}
 
-	public static boolean isWaitState(){
+	public  boolean isWaitState(){
 		return waitState;
 	}
 
@@ -181,6 +181,8 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 				result.append("=");
 				result.append(values.get(index));
 				result.append("&");
+
+				//ShowDialog.message(myContext, "coba baca " +keys.get(index) + " " + values.get(index));
 			}
 			
 			// last character remove the &' from the end of bufferstring
@@ -199,6 +201,8 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 			values.add(URLEncoder.encode(valIn, charset));
 		}catch(Exception ex){
 			endResult = "Error while adding data!";
+			ShowDialog.message(myContext, "Error while addData Web");
+			//ShowDialog.message(myContext, ex.getMessage());
 		}
 		
 	}
@@ -212,6 +216,8 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 			values.add(""+nilai);
 		}catch(Exception ex){
 			endResult = "Error while adding data!";
+			ShowDialog.message(myContext, "Error while addData Web boolean");
+
 		}
 		
 	}
@@ -225,6 +231,8 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 			fileNames.add(fileIn.getName());
 		}catch(Exception ex){
 			endResult = "Error while adding file!";
+			ShowDialog.message(myContext, "Error while addData Web File");
+
 		}
 		
 	}
@@ -260,6 +268,7 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 		        	conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
 
 		            //conn.setRequestProperty("User-Agent", "FGIMobile");
+					conn.addRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0");
 		        	
 		        }
 
@@ -410,7 +419,7 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 				}
 
 		    } catch (Exception e) {
-		 		ShowDialog.message(myContext, "error WebRequest " + e.getMessage());
+		 		ShowDialog.message(myContext, "Error dari WebRequest " + e.getMessage());
 		    	ErrorLogger.write(e);
 		    }
 

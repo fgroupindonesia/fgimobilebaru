@@ -26,6 +26,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -170,6 +171,15 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
             imageViewKelas.setImageResource(0);
             imageViewKelas.setImageResource(R.drawable.board_off);
+        }else {
+            imageViewSertifikasi.setImageResource(0);
+            imageViewSertifikasi.setImageResource(R.drawable.certificate);
+
+            imageViewDokumen.setImageResource(0);
+            imageViewDokumen.setImageResource(R.drawable.document);
+
+            imageViewKelas.setImageResource(0);
+            imageViewKelas.setImageResource(R.drawable.board);
         }
 
     }
@@ -177,6 +187,28 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
     @Override
     public void nextActivity() {
 
+    }
+
+    ScheduleSummary schSummary;
+    private void applyWarningStatus(){
+        warn = UserData.getPreferenceInt(WARNING_STATUS);
+        wsh = new WarningStatusHelper(warn);
+
+        if(wsh.isSafe()){
+            // if no warning found
+            textViewMessage.setText(UIHelper.replaceAllEnglishToIndonesian(schSummary.getText()));
+            textViewMessage.setTextColor(Color.BLACK);
+            textViewMessage.setBackgroundResource(R.color.yellow);
+        }else{
+            textViewMessage.setTextColor(Color.WHITE);
+            textViewMessage.setBackgroundResource(R.color.red);
+            textViewMessage.setText(wsh.getStatus() + " : Please contact admin!");
+
+        }
+
+        // only applied if the warning status isn't safe
+        // otherwise all lock will be opened again
+        disableByWarningStatus();
     }
 
     @Override
@@ -207,23 +239,14 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
                     Schedule objectSchedule []  = objectG.fromJson(mJson, Schedule[].class);
 
-                    ScheduleSummary schSummary = new ScheduleSummary(objectSchedule);
+                    schSummary = new ScheduleSummary(objectSchedule);
 
                     textViewMessage.setEllipsize(TextUtils.TruncateAt.MARQUEE);
                     textViewMessage.setSelected(true);
                     textViewMessage.setSingleLine(true);
 
-                   wsh = new WarningStatusHelper(warn);
-
-                    if(wsh.isSafe()){
-                            // if no warning found
-                        textViewMessage.setText(UIHelper.replaceAllEnglishToIndonesian(schSummary.getText()));
-
-                    }else{
-                        textViewMessage.setTextColor(Color.WHITE);
-                        textViewMessage.setBackgroundResource(R.color.red);
-                        textViewMessage.setText(wsh.getStatus() + " : Please contact admin!");
-                        disableByWarningStatus();
+                    if(schSummary!=null) {
+                        applyWarningStatus();
                     }
 
                 }
@@ -248,6 +271,16 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
         }
 
 
+    }
+
+    @Override
+    public void onResume(){
+
+        super.onResume();
+
+        if(schSummary!=null) {
+            applyWarningStatus();
+        }
     }
 
     private void showMainMenu(boolean b) {
@@ -284,7 +317,6 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
     public void logout(View v) {
 
-
         // call the Web that this person has been logged out from mobile
         addRecordHistory();
 
@@ -293,6 +325,7 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
         UserData.savePreference(Keys.USERNAME, null);
         UserData.savePreference(Keys.PASSWORD, null);
         UserData.savePreference(Keys.TOKEN, null);
+        UserData.savePreference(Keys.SIGNED_IN, false);
 
         finish();
 
@@ -382,6 +415,19 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
             }, realMilliseconds);
         }
 
+    }
+
+    public void openMaps(View v){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLReference.Gmaps));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.android.chrome");
+        try {
+            startActivity(intent);
+        } catch (Exception ex) {
+            // Chrome browser presumably not installed so allow user to choose instead
+            intent.setPackage(null);
+            startActivity(intent);
+        }
     }
 
     private void nextActivity(int jenisActivity) {

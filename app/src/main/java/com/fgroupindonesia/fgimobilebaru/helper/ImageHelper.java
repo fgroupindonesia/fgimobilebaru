@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +26,7 @@ import java.util.regex.Pattern;
 
 public class ImageHelper {
 
-    public static String convertToSmallJPG(Activity activityIn, String path1, String prefixName){
+    public static String convertToSmallJPG(AppCompatActivity activityIn, String path1, String prefixName){
 
         String pathEnd = null;
 
@@ -80,7 +82,7 @@ public class ImageHelper {
         return Uri.parse(path);
     }
 
-    public static String getRealPathFromURI(Activity act, Uri uri) {
+    public static String getRealPathFromURI(AppCompatActivity act, Uri uri) {
         String path = "";
         if (act.getContentResolver() != null) {
             Cursor cursor = act.getContentResolver().query(uri, null, null, null, null);
@@ -121,32 +123,41 @@ public class ImageHelper {
         return filePath;
     }
 
-    public static String getAlbumStorageDir(Activity actIn){
+    public static String getAlbumStorageDir(AppCompatActivity actIn){
         String path = Environment.getExternalStorageDirectory()
                 + "/Android/data/"+ actIn.getApplicationContext().getPackageName();
         return path;
     }
 
-    private static void scanMediaFile(File photo, Activity actIn) {
+    private static void scanMediaFile(File photo, AppCompatActivity actIn) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri contentUri = Uri.fromFile(photo);
         mediaScanIntent.setData(contentUri);
         actIn.sendBroadcast(mediaScanIntent);
     }
 
-    public static boolean addJpgSignatureToGallery(Bitmap signature, Activity actIn) {
+    private static String signFileName;
+    public static String getSignaturePath(){
+        return signFileName;
+    }
+
+    public static boolean addJpgSignatureToGallery(Bitmap signature, AppCompatActivity actIn) {
         boolean result = false;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Date dNow = new Date();
             String tglNempel = sdf.format(dNow);
 
-            File photo = new File(getAlbumStorageDir(actIn), String.format("absensi_%d.jpg", tglNempel));
+            File photo = new File(getAlbumStorageDir(actIn), String.format("absensi_%s.jpg", tglNempel));
+
+            // named stored as a future reference
+            signFileName = photo.getPath();
+
             saveBitmapToJPG(signature, photo);
             scanMediaFile(photo, actIn);
             result = true;
         } catch (Exception e) {
-            ShowDialog.message(actIn, "Error while saving signature...!");
+            ShowDialog.message(actIn, "Error while saving signature...!" + e.getMessage());
         }
         return result;
     }

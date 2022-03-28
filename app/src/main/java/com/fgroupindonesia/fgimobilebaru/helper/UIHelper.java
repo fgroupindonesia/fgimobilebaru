@@ -102,6 +102,31 @@ public class UIHelper {
         return tanggalIndo;
     }
 
+    public static int convertMonthToNumber(String monthName){
+        int  val = 1;
+
+        for(String bulan: monthIndonesia){
+            if(bulan.equals(monthName)){
+                    break;
+            }
+
+            val++;
+        }
+
+        return val;
+
+    }
+
+    public static String convertDateToEnglish(String dateSet) {
+        // dd-MMM-yyyy
+        // converted become yyyy-MM-dd HH:mm:ss
+        String dataMentah[] = dateSet.split("-");
+        String tanggalEnglish = dataMentah[2] + "-" + twoDigitNumber(convertMonthToNumber(dataMentah[1])) + "-" + twoDigitNumber(dataMentah[0]);
+
+        return tanggalEnglish;
+    }
+
+
     public static String convertStatusToIndonesia(String stat) {
         String val = null;
         switch (stat) {
@@ -179,16 +204,18 @@ public class UIHelper {
         act.getSupportActionBar().setCustomView(R.layout.actionbar);
     }
 
-    public static boolean empty(EditText element) {
+    private static String twoDigitNumber(String angkaMasuk){
+        return twoDigitNumber(Integer.parseInt(angkaMasuk));
+    }
 
-        boolean stat = false;
+    private static String twoDigitNumber(int num){
+        String dat= "" + num;
 
-        if (getText(element).trim().length() < 1) {
-            stat = true;
+        if(num<10){
+            dat = "0" + num;
         }
 
-        return stat;
-
+        return dat;
     }
 
 }
