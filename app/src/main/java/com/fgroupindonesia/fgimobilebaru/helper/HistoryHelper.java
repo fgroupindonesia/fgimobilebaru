@@ -1,9 +1,5 @@
 package com.fgroupindonesia.fgimobilebaru.helper;
 
-import android.view.View;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.fgroupindonesia.fgimobilebaru.AttendanceActivity;
 import com.fgroupindonesia.fgimobilebaru.BillActivity;
 import com.fgroupindonesia.fgimobilebaru.DesktopActivity;

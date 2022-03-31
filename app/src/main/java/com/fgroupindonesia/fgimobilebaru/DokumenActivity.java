@@ -265,6 +265,12 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
     }
 
     @Override
+    public void onFailed(){
+        // usually because no internet
+
+    }
+
+    @Override
     public void nextActivity() {
             Intent n = new Intent(this, PDFActivity.class);
             n.putExtra(Keys.FILE_PDF_TARGET, getCurrentFileName());

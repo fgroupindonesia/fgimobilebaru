@@ -73,10 +73,24 @@
                 android:src="@drawable/class_started" />
 
             <TextView
+                android:id="@+id/textviewKeteranganKelasBermula"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/text_desc_onclass" />
+
+            <Button
+                android:id="@+id/buttonSelesaiKelas"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/round_buttons"
+                android:gravity="center"
+                android:onClick="endClass"
+                android:text="@string/action_selesai"
+                android:textColor="@android:color/background_light"
+                android:textSize="12sp" />
+
         </LinearLayout>
 
         <LinearLayout

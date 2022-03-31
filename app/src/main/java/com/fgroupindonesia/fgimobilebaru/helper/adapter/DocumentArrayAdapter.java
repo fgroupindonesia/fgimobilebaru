@@ -3,7 +3,6 @@ package com.fgroupindonesia.fgimobilebaru.helper.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.format.Formatter;
@@ -21,7 +20,6 @@ import com.fgroupindonesia.fgimobilebaru.object.Document;
 import com.fgroupindonesia.fgimobilebaru.DokumenActivity;
 import com.fgroupindonesia.fgimobilebaru.R;
 import com.fgroupindonesia.fgimobilebaru.helper.FileOpener;
-import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 
 import java.io.File;
 import java.util.ArrayList;

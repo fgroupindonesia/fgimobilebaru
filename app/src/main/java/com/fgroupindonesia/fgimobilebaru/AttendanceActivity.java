@@ -747,6 +747,12 @@ public class AttendanceActivity extends AppCompatActivity implements Navigator {
     }
 
     @Override
+    public void onFailed(){
+        // usually because no internet
+
+    }
+
+    @Override
     public void onSuccess(String urlTarget, String respond) {
 
         try {

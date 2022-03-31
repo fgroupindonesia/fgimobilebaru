@@ -1,6 +1,5 @@
 package com.fgroupindonesia.fgimobilebaru.helper;
 
-import android.app.Activity;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -95,10 +94,20 @@ public class UIHelper {
     public static String convertDateToIndonesia(String dateSet) {
         // yyyy-MM-dd HH:mm:ss
         // converted become dd-MMMM-yyyy
-        String dataMentah[] = dateSet.split(" ");
-        String tanggalOnly[] = dataMentah[0].split("-");
-        String tanggalIndo = tanggalOnly[2] + "-" + convertMonthToIndonesia(Integer.parseInt(tanggalOnly[1])) + "-" + tanggalOnly[0];
+        String tanggalIndo = null;
 
+        try {
+            String dataMentah[] = dateSet.split(" ");
+            String tanggalOnly[] = dataMentah[0].split("-");
+            tanggalIndo = tanggalOnly[2] + "-" + convertMonthToIndonesia(Integer.parseInt(tanggalOnly[1])) + "-" + tanggalOnly[0];
+
+        } catch(Exception ex){
+
+            // 2nd try if the date is yyyy-MM-dd format without time
+            String tanggalOnly[] = dateSet.split("-");
+            tanggalIndo = tanggalOnly[2] + "-" + convertMonthToIndonesia(Integer.parseInt(tanggalOnly[1])) + "-" + tanggalOnly[0];
+
+        }
         return tanggalIndo;
     }
 

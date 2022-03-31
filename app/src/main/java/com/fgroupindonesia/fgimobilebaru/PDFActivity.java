@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
@@ -22,7 +21,6 @@ import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 import com.fgroupindonesia.fgimobilebaru.helper.WhatsappSender;
 
 import java.io.File;
-import java.net.URI;
 
 public class PDFActivity extends AppCompatActivity {
 

@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,13 +28,11 @@ import com.fgroupindonesia.fgimobilebaru.helper.URLReference;
 import com.fgroupindonesia.fgimobilebaru.helper.WebRequest;
 import com.fgroupindonesia.fgimobilebaru.helper.shared.UserData;
 import com.fgroupindonesia.fgimobilebaru.object.Bill;
-import com.fgroupindonesia.fgimobilebaru.object.Token;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.File;
 
@@ -323,6 +320,12 @@ public class BillActivity extends AppCompatActivity implements Navigator {
             billLayout.setVisibility(View.GONE);
             loadingLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onFailed(){
+        // usually because no internet
+
     }
 
     @Override

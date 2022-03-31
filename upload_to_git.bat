@@ -1,4 +1,4 @@
 git add .
-git commit -m "animated opening with short time GIF enabled."
+git commit -m "now the Class has been animated with CountDown, and User Expired Date at HomeActivity."
 git push origin main
 git gc --prune

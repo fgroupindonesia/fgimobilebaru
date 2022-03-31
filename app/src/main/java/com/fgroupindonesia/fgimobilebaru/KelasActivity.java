@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fgroupindonesia.fgimobilebaru.helper.ArrayHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.HistoryHelper;
 import com.fgroupindonesia.fgimobilebaru.helper.Keys;
 import com.fgroupindonesia.fgimobilebaru.helper.Navigator;
@@ -18,14 +17,11 @@ import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 import com.fgroupindonesia.fgimobilebaru.helper.URLReference;
 import com.fgroupindonesia.fgimobilebaru.helper.WebRequest;
 import com.fgroupindonesia.fgimobilebaru.helper.shared.UserData;
-import com.fgroupindonesia.fgimobilebaru.object.RemoteLoginClient;
 import com.fgroupindonesia.fgimobilebaru.object.Schedule;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static com.fgroupindonesia.fgimobilebaru.helper.Keys.STATUS_RATE_CONFUSED;
 
 public class KelasActivity extends AppCompatActivity implements Navigator {
 
@@ -34,19 +30,22 @@ public class KelasActivity extends AppCompatActivity implements Navigator {
 
     String usName, aToken;
     ScheduleChecker engineScheduleChecker = new ScheduleChecker(this);
-    Schedule dataSchedulesIn [] =null;
+    Schedule dataSchedulesIn [] = null;
+
+    TextView textviewKeteranganKelasBermula;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kelas);
 
-
         // for shared preference
         UserData.setPreference(this);
 
         usName = UserData.getPreferenceString(Keys.USERNAME);
         aToken = UserData.getPreferenceString(Keys.TOKEN);
+
+        textviewKeteranganKelasBermula = (TextView) findViewById(R.id.textviewKeteranganKelasBermula);
 
         linearLayoutLoading = (LinearLayout) findViewById(R.id.linearLayoutLoading);
         linearLayoutKelas = (LinearLayout) findViewById(R.id.linearLayoutKelas);
@@ -103,7 +102,6 @@ public class KelasActivity extends AppCompatActivity implements Navigator {
 
     }
 
-
     public void ratingNormal(View v){
         postRating(Keys.STATUS_RATE_NORMAL);
     }
@@ -122,6 +120,12 @@ public class KelasActivity extends AppCompatActivity implements Navigator {
     }
 
     @Override
+    public void onDestroy(){
+        cTimer.cancel();
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed(){
         if(cTimer!=null)
             cTimer.cancel();
@@ -129,17 +133,60 @@ public class KelasActivity extends AppCompatActivity implements Navigator {
         super.onBackPressed();
     }
 
+    public void endClass(View v){
+        cTimer.cancel();
+        showLayout(Keys.LAYOUT_KELAS_RATING);
+    }
+
     CountDownTimer cTimer = null;
-    private void startTimerChecking(){
+    long difference_In_Hours, difference_In_Minutes, difference_In_Seconds;
+
+    private void startTimerChecking(long timeMillisecondsReal){
 
         // duration for checking is every 2 minutes
         int TIME_WAIT_SECOND = 120;
         int timeMilis = 1000 * TIME_WAIT_SECOND;
         int timeMilisExperiment = 1000 * 3;
 
-        cTimer = new CountDownTimer(timeMilisExperiment, 1000) {
-            public void onTick(long millisUntilFinished) {
 
+        difference_In_Hours
+                = (timeMillisecondsReal
+                / (1000 * 60 * 60))
+                % 24;
+
+         difference_In_Minutes
+                = (timeMillisecondsReal
+                / (1000 * 60))
+                % 60;
+
+        difference_In_Seconds
+                = (timeMillisecondsReal
+                / 1000)
+                % 60;
+
+ //       ShowDialog.message(this, "we will wait for " + timeMillisecondsReal + "\nsekitar " + difference_In_Hours + " jam " + difference_In_Minutes + " menit.");
+
+        cTimer = new CountDownTimer(timeMillisecondsReal, 1000) {
+            public void onTick(long millisUntilFinished) {
+                difference_In_Hours = (millisUntilFinished
+                        / (1000 * 60 * 60))
+                        % 24;
+                difference_In_Minutes = (millisUntilFinished
+                        / (1000 * 60))
+                        % 60;
+
+                difference_In_Seconds
+                        = (millisUntilFinished
+                        / 1000)
+                        % 60;
+
+                if(difference_In_Hours>0) {
+                    textviewKeteranganKelasBermula.setText("Kelas sudah bermula!\nMasih ada waktu sekitar\n" + difference_In_Hours
+                            + " jam " + difference_In_Minutes + " menit " + difference_In_Seconds + " detik.");
+                }else{
+                    textviewKeteranganKelasBermula.setText("Kelas sudah bermula!\nMasih ada waktu sekitar\n" +
+                            difference_In_Minutes + " menit " + difference_In_Seconds + " detik.");
+                }
             }
 
             public void onFinish() {
@@ -165,6 +212,12 @@ public class KelasActivity extends AppCompatActivity implements Navigator {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         Date now = new Date();
         return sdf.format(now);
+    }
+
+    @Override
+    public void onFailed(){
+        // usually because no internet
+
     }
 
     @Override
@@ -197,7 +250,10 @@ public class KelasActivity extends AppCompatActivity implements Navigator {
 
                          // run the timer for checking whether the class has been ended
                          // if so, then show the rating layout
-                         startTimerChecking();
+
+                         // and we also set time timer on the length of time required
+                         // before finished the actuall class
+                         startTimerChecking(engineScheduleChecker.getTimeNeededFromNow());
 
                          // add the record on history at server
                          String jam = getHourNow();

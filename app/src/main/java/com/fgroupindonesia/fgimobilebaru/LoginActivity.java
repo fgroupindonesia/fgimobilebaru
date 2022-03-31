@@ -1,6 +1,5 @@
 package com.fgroupindonesia.fgimobilebaru;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -13,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
     ProgressBar progressBar;
     TextView textViewregisterNewUser, textViewTidakBisaLogin;
 
+    Button buttonLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
         // for shared preference
         UserData.setPreference(this);
 
+        buttonLogin = (Button) findViewById(R.id.buttonLogin);
         editTextUsername = (EditText) findViewById(R.id.editTextUsername);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 
@@ -116,6 +118,8 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
 
     public void verifyUser(View v){
 
+        buttonLogin.setVisibility(View.INVISIBLE);
+        textViewErrorMessage.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
         int WAITING_TIME_DELAY = 3;
@@ -151,6 +155,15 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
     }
 
     @Override
+    public void onFailed(){
+        // usually because no internet
+        textViewErrorMessage.setVisibility(View.VISIBLE);
+        textViewErrorMessage.setText("Server is busy! Try again later...");
+        progressBar.setVisibility(View.INVISIBLE);
+        buttonLogin.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void nextActivity() {
         Intent  intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
@@ -163,6 +176,7 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
             // ShowDialog.message(this, "dapt " + respond);
 
             progressBar.setVisibility(View.INVISIBLE);
+            textViewErrorMessage.setVisibility(View.INVISIBLE);
 
             Gson objectG = new Gson();
 
@@ -182,26 +196,32 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
                     UserData.savePreference(Keys.WARNING_STATUS, objectToken.getWarning_status());
                     UserData.savePreference(Keys.USERNAME, objectToken.getUsername());
                     UserData.savePreference(Keys.TOKEN, objectToken.getToken());
+                    UserData.savePreference(Keys.TOKEN_EXPIRED_DATE, objectToken.getExpired_date());
                     UserData.savePreference(Keys.SIGNED_IN, true);
+
+                    //ShowDialog.message(this, "expired @"+objectToken.getExpired_date());
 
                     // add the history on server side
                     addRecordHistory(objectToken.getUsername(), objectToken.getToken());
 
                 }else if(urlTarget.contains(URLReference.HistoryAdd)){
 
-                    textViewErrorMessage.setVisibility(View.INVISIBLE);
-
+                    // normally again
+                    buttonLogin.setVisibility(View.VISIBLE);
                     nextActivity();
+
                 }
 
             } else if (!RespondHelper.isValidRespond(respond)) {
 
+                buttonLogin.setVisibility(View.VISIBLE);
                 textViewErrorMessage.setVisibility(View.VISIBLE);
+                textViewErrorMessage.setText("Username & password invalid! Please try again...");
                 //finish();
 
             }
         } catch (Exception ex) {
-            ShowDialog.message(this, "Error " + ex.getMessage());
+            ShowDialog.message(this, "Error @login " + ex.getMessage());
             ex.printStackTrace();
         }
 

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.fgroupindonesia.fgimobilebaru.helper.Keys;
 import com.fgroupindonesia.fgimobilebaru.helper.Navigator;
@@ -17,13 +16,11 @@ import com.fgroupindonesia.fgimobilebaru.helper.URLReference;
 import com.fgroupindonesia.fgimobilebaru.helper.WebRequest;
 import com.fgroupindonesia.fgimobilebaru.helper.shared.UserData;
 import com.fgroupindonesia.fgimobilebaru.object.History;
-import com.fgroupindonesia.fgimobilebaru.object.Token;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class HistoryActivity extends AppCompatActivity implements Navigator {
 
@@ -97,6 +94,12 @@ public class HistoryActivity extends AppCompatActivity implements Navigator {
     stb.append(histObject.getDate_created() + " for\n" + histObject.getDescription() +"\n\n");
 
     editTextTextMultiLine.setText(textPrev + stb.toString());
+
+    }
+
+    @Override
+    public void onFailed(){
+        // usually because no internet
 
     }
 

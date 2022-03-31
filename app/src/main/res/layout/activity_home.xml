@@ -445,6 +445,19 @@
             android:textSize="15dp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/textViewExpiredDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:padding="15dp"
+            android:singleLine="true"
+            android:text="@string/text_label_loading"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -186,6 +186,11 @@ public class SertifikasiActivity extends AppCompatActivity implements Navigator,
         startActivity(n);
     }
 
+    @Override
+    public void onFailed(){
+        // usually because no internet
+
+    }
 
     @Override
     public void onSuccess(String urlTarget, String respond) {

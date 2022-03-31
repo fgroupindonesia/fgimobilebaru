@@ -94,6 +94,12 @@ public class SettingsActivity extends AppCompatActivity implements Navigator {
     }
 
     @Override
+    public void onFailed(){
+        // usually because no internet
+
+    }
+
+    @Override
     public void nextActivity() {
 
     }

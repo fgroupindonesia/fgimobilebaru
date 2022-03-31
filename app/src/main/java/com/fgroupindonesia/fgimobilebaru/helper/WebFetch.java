@@ -2,9 +2,6 @@ package com.fgroupindonesia.fgimobilebaru.helper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fgroupindonesia.fgimobilebaru.helper.FileOpener;
-import com.fgroupindonesia.fgimobilebaru.helper.NavigatorFetch;
-import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 import com.tonyodev.fetch2.Download;
 import com.tonyodev.fetch2.Error;
 import com.tonyodev.fetch2.Fetch;
@@ -19,7 +16,6 @@ import com.tonyodev.fetch2core.Func;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Random;
 

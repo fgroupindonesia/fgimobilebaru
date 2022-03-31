@@ -47,6 +47,7 @@ public class User {
     String username;
     String pass;
     String email;
+    private String expired_date;
     private String address;
     private String mobile;
     private String tmv_id;
@@ -100,5 +101,13 @@ public class User {
 
     public void setTmv_pass(String tmv_pass) {
         this.tmv_pass = tmv_pass;
+    }
+
+    public String getExpired_date() {
+        return expired_date;
+    }
+
+    public void setExpired_date(String expired_date) {
+        this.expired_date = expired_date;
     }
 }

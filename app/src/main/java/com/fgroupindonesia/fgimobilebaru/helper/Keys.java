@@ -38,8 +38,8 @@ public class Keys {
             SCHEDULE = "schedule", LAST_SIGNATURE_DATE = "last_signature_date",
             LAST_SIGNATURE_DATETIME = "last_signature_date_time",
             LAST_SIGNATURE_STATUS = "last_signature_status",
-            SIGNED_IN = "signed_in",
-            FILE_PDF_TARGET = "file_pdf_target";
+            SIGNED_IN = "signed_in", TOKEN_EXPIRED_DATE = "token_expired_date",
+            FILE_PDF_TARGET = "file_pdf_target", USER_EXPIRED_DATE = "user_expired_date";
 
 
 }

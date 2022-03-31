@@ -1,12 +1,9 @@
 package com.fgroupindonesia.fgimobilebaru.helper.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
-import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +15,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fgroupindonesia.fgimobilebaru.SertifikasiActivity;
-import com.fgroupindonesia.fgimobilebaru.object.Document;
-import com.fgroupindonesia.fgimobilebaru.DokumenActivity;
 import com.fgroupindonesia.fgimobilebaru.R;
 import com.fgroupindonesia.fgimobilebaru.helper.FileOpener;
-import com.fgroupindonesia.fgimobilebaru.helper.ShowDialog;
 import com.fgroupindonesia.fgimobilebaru.object.Sertifikat;
 
 import java.io.File;

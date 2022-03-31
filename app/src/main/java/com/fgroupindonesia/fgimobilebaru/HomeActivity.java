@@ -28,11 +28,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,7 +48,8 @@ import static com.fgroupindonesia.fgimobilebaru.helper.Keys.*;
 public class HomeActivity extends AppCompatActivity implements Navigator {
 
     WarningStatusHelper wsh;
-    TextView textViewLogout, textviewUsername, textViewMessage;
+    TextView textViewLogout, textviewUsername,
+            textViewExpiredDate, textViewMessage;
     WebRequest httpCall;
     ImageView imageViewSertifikasi, imageViewKelas, imageViewDokumen;
     String filePropicName, usName, aToken;
@@ -67,6 +68,12 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
         setContentView(R.layout.activity_home);
 
         addScreenUnlockFlag();
+        textViewExpiredDate = (TextView) findViewById(R.id.textViewExpiredDate);
+
+        // applying animation
+        textViewExpiredDate.setBackground(this.getDrawable(R.drawable.round_textview_gray));
+        textViewExpiredDate.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in_out));
+
         textviewUsername = (TextView) findViewById(R.id.textviewUsername);
         textViewLogout = (TextView) findViewById(R.id.textViewLogout);
         textViewMessage = (TextView) findViewById(R.id.textViewMessage);
@@ -75,7 +82,8 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
         imageViewKelas = (ImageView) findViewById(R.id.imageViewHomeKelas) ;
         imageViewDokumen = (ImageView) findViewById(R.id.imageViewHomeDokumen);
 
-        textViewMessage.setBackgroundResource(R.color.yellow);
+        // textViewMessage.setBackgroundResource(R.color.yellow);
+        textViewMessage.setBackground(this.getDrawable(R.drawable.round_textview_yellow));
 
          imageUserProfileHome = (ImageView) findViewById(R.id.imageUserProfileHome);
 
@@ -198,11 +206,14 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
             // if no warning found
             textViewMessage.setText(UIHelper.replaceAllEnglishToIndonesian(schSummary.getText()));
             textViewMessage.setTextColor(Color.BLACK);
-            textViewMessage.setBackgroundResource(R.color.yellow);
+            //textViewMessage.setBackgroundResource(R.color.yellow);
+            textViewMessage.setBackground(this.getDrawable(R.drawable.round_textview_yellow));
+
         }else{
             textViewMessage.setTextColor(Color.WHITE);
-            textViewMessage.setBackgroundResource(R.color.red);
             textViewMessage.setText(wsh.getStatus() + " : Please contact admin!");
+            // textViewMessage.setBackgroundResource(R.color.red);
+            textViewMessage.setBackground(this.getDrawable(R.drawable.round_textview_red));
 
         }
 
@@ -210,6 +221,10 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
         // otherwise all lock will be opened again
         disableByWarningStatus();
     }
+
+    // for experimental purposes
+    // such as expired after study or amount of class attended later
+    String expDate;
 
     @Override
     public void onSuccess(String urlTarget, String respond) {
@@ -223,6 +238,19 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
                     JSONObject jo = RespondHelper.getObject(respond, "multi_data");
                     filePropicName = jo.getString("propic");
+
+                    ShowDialog.message(this, "propic got " + filePropicName);
+
+                    expDate = jo.getString("expired_date");
+
+                    ShowDialog.message(this, "exp got " + expDate);
+
+                    if(expDate==null) {
+                        textViewExpiredDate.setText("Exp. Date : unlimited.");
+                    }else{
+                        UserData.savePreference(USER_EXPIRED_DATE, expDate);
+                        textViewExpiredDate.setText("Exp. Date : " + UIHelper.convertDateToIndonesia(expDate));
+                    }
 
                     //ShowDialog.message(this, "propic got " + filePropicName);
 
@@ -266,7 +294,7 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
 
             }
         } catch (Exception ex) {
-            ShowDialog.message(this, "Error " + ex.getMessage());
+            ShowDialog.message(this, "Error 292 " + ex.getMessage());
             ex.printStackTrace();
         }
 
@@ -428,6 +456,12 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
             intent.setPackage(null);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onFailed(){
+        // usually because no internet
+
     }
 
     private void nextActivity(int jenisActivity) {

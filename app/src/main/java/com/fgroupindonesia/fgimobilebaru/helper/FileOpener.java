@@ -1,19 +1,13 @@
 package com.fgroupindonesia.fgimobilebaru.helper;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
-
-import com.fgroupindonesia.fgimobilebaru.PDFActivity;
 
 import java.io.File;
-
-import static android.provider.Settings.AUTHORITY;
 
 public class FileOpener {
 
