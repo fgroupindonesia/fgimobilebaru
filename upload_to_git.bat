@@ -1,4 +1,4 @@
 git add .
-git commit -m "now the Class has been animated with CountDown, and User Expired Date at HomeActivity."
+git commit -m "imported fgi_portal.sql for the API usage..."
 git push origin main
 git gc --prune
