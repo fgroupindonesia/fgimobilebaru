@@ -41,7 +41,7 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
         ImageView imageViewWhatsapp;
     }
 
-    public void setActivity(Activity actIn) {
+    public void setActivity(AppCompatActivity actIn) {
         dokAct = (DokumenActivity) actIn;
     }
 
@@ -51,14 +51,18 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
 
 
     private String getPath() {
-        String path = Environment.getExternalStorageDirectory()
-                + "/Android/data/" + context.getPackageName() + "/files";
+        // we exclude this one
+        // String path = Environment.getExternalStorageDirectory()
+        //         + "/Android/data/" + context.getPackageName() + "/files";
 
+
+        // with the new one for internal access usage
+        String path = FileOpener.getSystemFilePath(getActivity());
         return path;
     }
 
     private File getFilePath(String filename){
-        String mypath = getPath() + "/" + filename;
+        String mypath = getPath() + filename;
         return new File(mypath);
     }
 
@@ -94,21 +98,20 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
     }
 
     private void openingFile(String filename) {
-        String namaDicari = new File(getPath(), filename).getAbsolutePath();
+        String namaDicari = getFilePath(filename).getAbsolutePath();
         //ShowDialog.message(getActivity(), "lokasi ke " + namaDicari);
 
         if(filename.contains("pdf")){
             dokAct.setCurrentFileName(namaDicari);
             dokAct.nextActivity();
-
         }else{
             FileOpener.openFile(getActivity(), new File(getPath(), filename));
 
         }
     }
 
-    private void downloadFile(ImageView img, ProgressBar prgBar1, ProgressBar prgBar2, String fileNa, String urlNa) {
-        ((DokumenActivity) getActivity()).downloadFile(img, prgBar1, prgBar2, fileNa, urlNa);
+    private void downloadFile(TextView txt, ImageView img, ProgressBar prgBar1, ProgressBar prgBar2, String fileNa, String urlNa) {
+        ((DokumenActivity) getActivity()).downloadFile(txt, img, prgBar1, prgBar2, fileNa, urlNa);
         //ShowDialog.message(getActivity(),"downloading...");
     }
 
@@ -132,7 +135,7 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
                 // downloading...
                 //ShowDialog.message(getActivity(), "trying to download " + d.getUrl());
                 // with progressbar shown
-                downloadFile(vh.imageAccess, vh.progressBarPercentage, vh.progressBarDokumen, d.getFilename(), d.getUrl());
+                downloadFile(vh.txtSize, vh.imageAccess, vh.progressBarPercentage, vh.progressBarDokumen, d.getFilename(), d.getUrl());
                 showAnimatedDownload(vh,true);
             } else if (jenisIcon.contains("checklist")) {
                 // opening
@@ -154,8 +157,8 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
 
     private String getFileSize(String aFileName) {
         if (aFileName != null) {
-            String loc = getPath() + "/" + aFileName;
-            return "size : " + Formatter.formatShortFileSize(context, new File(loc).length());
+
+            return "size : " + Formatter.formatShortFileSize(context, getFilePath(aFileName).length());
         }
 
         return "size : 0";
@@ -223,7 +226,7 @@ public class DocumentArrayAdapter extends ArrayAdapter<Document> {
 
                     if (tag.contains("download")) {
                         // we are required to download
-                        downloadFile(viewHolder.imageAccess, viewHolder.progressBarDokumen, viewHolder.progressBarPercentage, dataModel.getFilename(), dataModel.getUrl());
+                        downloadFile(viewHolder.txtSize, viewHolder.imageAccess, viewHolder.progressBarDokumen, viewHolder.progressBarPercentage, dataModel.getFilename(), dataModel.getUrl());
                         showAnimatedDownload(viewHolder,true);
                     } else if (tag.contains("checklist")) {
                         // we may directly open the file locally

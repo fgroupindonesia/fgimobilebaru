@@ -50,9 +50,13 @@ public class ImageHelper {
                     bmp, 0, 0, width, height, matrix, false);
             bmp.recycle();
 
-            String path = Environment.getExternalStorageDirectory()
-                    + "/Android/data/"+ activityIn.getApplicationContext().getPackageName();
-                    //+ getApplicationContext().getPackageName();
+            //  excluded
+            //  String path = Environment.getExternalStorageDirectory()
+            //        + "/Android/data/"+ activityIn.getApplicationContext().getPackageName();
+            //
+
+            // now we used
+            String path  = getAlbumStorageDir(activityIn);
 
             File photo = new File(path + "/" + String.format(prefixName+"_%d.jpeg", System.currentTimeMillis()));
             FileOutputStream out = new FileOutputStream(photo);
@@ -123,8 +127,12 @@ public class ImageHelper {
     }
 
     public static String getAlbumStorageDir(AppCompatActivity actIn){
-        String path = Environment.getExternalStorageDirectory()
-                + "/Android/data/"+ actIn.getApplicationContext().getPackageName();
+        // excluded
+        // String path = Environment.getExternalStorageDirectory()
+        //         + "/Android/data/"+ actIn.getApplicationContext().getPackageName();
+
+        // now we used the below internal storage access only
+        String path = FileOpener.getSystemFilePath(actIn);
         return path;
     }
 

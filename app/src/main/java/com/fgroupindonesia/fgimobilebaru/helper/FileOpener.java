@@ -12,18 +12,31 @@ import java.io.File;
 public class FileOpener {
 
 
-    public FileOpener(){
+    public FileOpener() {
 
     }
 
-    public static String getSystemFilePath(AppCompatActivity act){
-      String lokasi =  Environment.getExternalStorageDirectory()
-                + "/Android/data/"+ act.getPackageName() + "/files/";
-      return lokasi;
+    public static String getSystemFilePath(AppCompatActivity actIn) {
+        // we exclude this
+        // String lokasi =  Environment.getExternalStorageDirectory()
+        //           + "/Android/data/"+ act.getPackageName() + "/files/";
+
+        // with the new internal storage access only
+        File f = actIn.getFilesDir();
+
+        if (!f.exists()) {
+            f.mkdirs();
+           // ShowDialog.message(actIn, "lokasi baru dibuat di " + f.getAbsolutePath());
+        }else{
+            //ShowDialog.message(actIn, "lokasi sudah ada di " + f.getAbsolutePath());
+        }
+
+        String lokasi = f.getAbsolutePath() + "/";
+        return lokasi;
     }
 
-    public static void openFile(AppCompatActivity act, File fileIn){
-        Uri uri  = null;
+    public static void openFile(AppCompatActivity act, File fileIn) {
+        Uri uri = null;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -41,7 +54,7 @@ public class FileOpener {
             intent.setDataAndType(uri, "application/msword");
         } else if (fileIn.toString().contains(".pdf")) {
             // PDF file
-             intent.setDataAndType(uri, "application/pdf");
+            intent.setDataAndType(uri, "application/pdf");
 
         } else if (fileIn.toString().contains(".ppt") || fileIn.toString().contains(".pptx")) {
             // Powerpoint file
@@ -52,7 +65,7 @@ public class FileOpener {
         } else if (fileIn.toString().contains(".zip")) {
             // ZIP file
             intent.setDataAndType(uri, "application/zip");
-        } else if (fileIn.toString().contains(".rar")){
+        } else if (fileIn.toString().contains(".rar")) {
             // RAR file
             intent.setDataAndType(uri, "application/x-rar-compressed");
         } else if (fileIn.toString().contains(".rtf")) {
@@ -80,11 +93,10 @@ public class FileOpener {
 
         try {
 
-                act.startActivity(intent);
+            act.startActivity(intent);
 
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             ShowDialog.message(act, "error while opening file " + fileIn.getName());
             ShowDialog.message(act, e.getMessage());
             e.printStackTrace();

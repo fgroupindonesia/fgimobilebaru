@@ -1,5 +1,7 @@
 package com.fgroupindonesia.fgimobilebaru.helper;
 
+import android.text.format.Formatter;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tonyodev.fetch2.Download;
@@ -16,6 +18,7 @@ import com.tonyodev.fetch2core.Func;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 
@@ -23,31 +26,37 @@ public class WebFetch {
 
 
     // this is the 3rd party library called FETCH Library
-    private String targetURL, filename, endResult;
+    private String targetURL, filename, endResult, fileSize;
     AppCompatActivity myContext;
     NavigatorFetch webcallFetch;
 
-    public WebFetch(AppCompatActivity ap, NavigatorFetch nv){
+    public WebFetch(AppCompatActivity ap, NavigatorFetch nv) {
         myContext = ap;
         webcallFetch = nv;
 
         prepareFetchLibrary();
     }
 
-    public void setTargetURL(String anURL){
+    private String getEndPath() {
+        return endPath;
+    }
+
+
+    public void setTargetURL(String anURL) {
         targetURL = anURL;
     }
 
-    public void setFileNameToBeSaved(String fn){
+    public void setFileNameToBeSaved(String fn) {
         filename = fn;
     }
 
-    public void setActivity(AppCompatActivity act){
+    public void setActivity(AppCompatActivity act) {
         myContext = act;
     }
 
     private Fetch fetchExecutor;
-    private void prepareFetchLibrary(){
+
+    private void prepareFetchLibrary() {
         FetchConfiguration fetchConfiguration = new FetchConfiguration.Builder(myContext)
                 .setDownloadConcurrentLimit(3)
                 .build();
@@ -55,7 +64,7 @@ public class WebFetch {
         fetchExecutor = Fetch.Impl.getInstance(fetchConfiguration);
     }
 
-    private String generateRandomKey(){
+    private String generateRandomKey() {
 
         String upperAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowerAlphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -73,7 +82,7 @@ public class WebFetch {
         // specify length of random string
         int length = 25;
 
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
 
             // generate random index number
             int index = random.nextInt(alphaNumeric.length());
@@ -90,10 +99,12 @@ public class WebFetch {
         return randomString;
     }
 
+    String endPath;
     Request requestFetch = null;
-    public void executeFetch(){
 
-        final String endPath = FileOpener.getSystemFilePath(myContext) + filename;
+    public void executeFetch() {
+
+        endPath = FileOpener.getSystemFilePath(myContext) + filename;
 
         requestFetch = new Request(targetURL, endPath);
         requestFetch.setPriority(Priority.HIGH);
@@ -139,12 +150,9 @@ public class WebFetch {
                 // the respond is actually the file path completely
 
                 endResult = endPath;
-
                 webcallFetch.onSuccessByFetch(targetURL, endResult);
-               // ShowDialog.message(myContext, "fetch is completed!");
 
             }
-
 
 
             @Override

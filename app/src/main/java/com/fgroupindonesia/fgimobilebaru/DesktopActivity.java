@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -193,6 +194,19 @@ public class DesktopActivity extends AppCompatActivity implements Navigator {
 
     @Override
     public void nextActivity() {
+        ShowDialog.message(this, "Logging in desktop succeed...!");
+            finish();
+    }
+
+    final int WAITING_TIME = 5 * 1000;
+    private void backHomeAfterSeconds(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                nextActivity();
+            }
+        }, WAITING_TIME);
 
     }
 
@@ -213,7 +227,10 @@ public class DesktopActivity extends AppCompatActivity implements Navigator {
                     // and post a history API call
                     addRecordHistory();
 
-                    finish();
+                    showLoading(true);
+
+                    // timer out 5-7 seconds back home
+                    backHomeAfterSeconds();
 
                 } else if(urlTarget.contains(URLReference.RemoteLoginShow)){
 

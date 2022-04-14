@@ -1,4 +1,4 @@
 git add .
-git commit -m "imported fgi_portal.sql for the API usage..."
+git commit -m "updated for Document & Sertifikat Activities..."
 git push origin main
 git gc --prune

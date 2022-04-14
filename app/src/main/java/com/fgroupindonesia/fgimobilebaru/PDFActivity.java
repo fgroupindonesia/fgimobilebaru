@@ -125,7 +125,7 @@ public class PDFActivity extends AppCompatActivity {
 
         } catch (Exception n){
             ShowDialog.message(this, "something " + n.getMessage());
-            ErrorLogger.write(n);
+            ErrorLogger.write(this, n);
         }
 
 
@@ -152,7 +152,7 @@ public class PDFActivity extends AppCompatActivity {
                 uri = Uri.parse(file.getPath()); // My work-around for SDKs up to 29.
             }
 
-            ShowDialog.message(this, "sudah betul " + uri);
+           // ShowDialog.message(this, "sudah betul " + uri);
 
 
             //min. API Level 21

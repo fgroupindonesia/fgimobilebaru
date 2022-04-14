@@ -3,7 +3,7 @@ package com.fgroupindonesia.fgimobilebaru.helper;
 public class URLReference {
 
     //public static String Remote = "http://api.portal.fgroupindonesia.com";
-    public static String Remote = "http://192.168.0.8";
+    public static String Remote = "http://192.168.0.10";
     public static String Gmaps = "https://goo.gl/maps/Ycxx2BjB3cRBpBso7";
     public static String RemoteLoginVerify = Remote + "/remotelogin/verify";
     public static String RemoteLoginDisconnect = Remote + "/remotelogin/disconnect";

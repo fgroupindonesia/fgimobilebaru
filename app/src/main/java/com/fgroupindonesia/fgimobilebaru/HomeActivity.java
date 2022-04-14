@@ -239,11 +239,11 @@ public class HomeActivity extends AppCompatActivity implements Navigator {
                     JSONObject jo = RespondHelper.getObject(respond, "multi_data");
                     filePropicName = jo.getString("propic");
 
-                    ShowDialog.message(this, "propic got " + filePropicName);
+                   // ShowDialog.message(this, "propic got " + filePropicName);
 
                     expDate = jo.getString("expired_date");
 
-                    ShowDialog.message(this, "exp got " + expDate);
+                    //ShowDialog.message(this, "exp got " + expDate);
 
                     if(expDate==null) {
                         textViewExpiredDate.setText("Exp. Date : unlimited.");

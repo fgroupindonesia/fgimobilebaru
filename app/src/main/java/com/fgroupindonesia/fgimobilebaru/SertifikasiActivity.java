@@ -32,7 +32,7 @@ import com.tonyodev.fetch2.FetchConfiguration;
 import java.io.File;
 import java.util.ArrayList;
 
-public class SertifikasiActivity extends AppCompatActivity implements Navigator, NavigatorFetch {
+public  class SertifikasiActivity extends AppCompatActivity implements Navigator, NavigatorFetch {
 
     private Fetch fetch;
     TextView textViewSertifikatTotal;
@@ -134,6 +134,8 @@ public class SertifikasiActivity extends AppCompatActivity implements Navigator,
         imageAccess = img;
 
         WebFetch httpCall = new WebFetch(this, this);
+        //no need to calculate size
+        //httpCall.setCalculateSizeRequired(true);
         httpCall.setFileNameToBeSaved(fileName);
         httpCall.setTargetURL(alamatTujuan);
         httpCall.executeFetch();
@@ -251,18 +253,29 @@ public class SertifikasiActivity extends AppCompatActivity implements Navigator,
 
     }
 
+    private void refreshCurrentActivity(){
+
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+        finish();
+    }
+
     @Override
     public void onSuccessByFetch(String urlTarget, String result) {
         // this is a call back of completed download by 3rd party fetch library
 
         if(urlTarget.contains(urlDownload)){
+          /*
             prgBar01.setVisibility(View.GONE);
             prgBar02.setVisibility(View.GONE);
-
             imageAccess.setImageResource(R.drawable.checklist);
             imageAccess.setTag("checklist");
             imageAccess.setVisibility(View.VISIBLE);
 
+            */
+
+            refreshCurrentActivity();
         }
 
     }

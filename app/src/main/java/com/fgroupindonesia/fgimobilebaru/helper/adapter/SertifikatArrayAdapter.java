@@ -48,14 +48,18 @@ public class SertifikatArrayAdapter extends ArrayAdapter<Sertifikat> {
 
 
     private String getPath() {
-        String path = Environment.getExternalStorageDirectory()
-                + "/Android/data/" + context.getPackageName() + "/files";
+        // we exclude this one
+        // String path = Environment.getExternalStorageDirectory()
+        //         + "/Android/data/" + context.getPackageName() + "/files";
 
+
+        // with the new one for internal access usage
+        String path = FileOpener.getSystemFilePath(getActivity());
         return path;
     }
 
     private File getFilePath(String filename){
-        String mypath = getPath() + "/" + filename;
+        String mypath = getPath() + filename;
         return new File(mypath);
     }
 
@@ -71,8 +75,7 @@ public class SertifikatArrayAdapter extends ArrayAdapter<Sertifikat> {
                 objFile.mkdirs();
             }
 
-            String mypath = getPath() + "/" + aFileName;
-            objFile = new File(mypath);
+            objFile = getFilePath(aFileName);
             if (objFile.exists()) {
                 stat = true;
             }
@@ -92,7 +95,7 @@ public class SertifikatArrayAdapter extends ArrayAdapter<Sertifikat> {
     }
 
     private void openingFile(String filename) {
-        String namaDicari = new File(getPath(), filename).getAbsolutePath();
+        String namaDicari = getFilePath(filename).getAbsolutePath();
        // ShowDialog.message(getActivity(), "lokasi dari " + namaDicari);
 
         if(filename.contains("pdf")){
@@ -100,7 +103,7 @@ public class SertifikatArrayAdapter extends ArrayAdapter<Sertifikat> {
             dokAct.nextActivity();
 
         }else{
-            FileOpener.openFile(getActivity(), new File(getPath(), filename));
+            FileOpener.openFile(getActivity(), getFilePath(filename));
 
         }
 

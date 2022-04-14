@@ -348,8 +348,12 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
 
                     // the file name expected is here in the first data
                     String singleFile = getFirstData();
-                    String pathNa = Environment.getExternalStorageDirectory()
-                            + "/Android/data/" + myContext.getPackageName() + "/files/";
+                    // we exclude this
+                    // String pathNa = Environment.getExternalStorageDirectory()
+                    //        + "/Android/data/" + myContext.getPackageName() + "/files/";
+
+                    // become new one
+                    String pathNa = FileOpener.getSystemFilePath(myContext);
                     String endPath = pathNa + singleFile;
 
 
@@ -407,7 +411,7 @@ public class WebRequest extends AsyncTask<String, Integer, String> {
             if (isDebugMode()) {
                 ShowDialog.message(myContext, "Error @WebRequest " + e.getMessage());
             }
-            ErrorLogger.write(e);
+            ErrorLogger.write(myContext, e);
         }
 
         return null;

@@ -87,7 +87,7 @@ public class BillActivity extends AppCompatActivity implements Navigator {
         }, Keys.PERIOD_OF_TIME_WAIT_GENERAL);
 
         // for the title removal
-        UIHelper.toggleTitleApp(this);
+        //UIHelper.toggleTitleApp(this);
 
 
     }

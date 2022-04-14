@@ -9,7 +9,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,7 +33,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 
-public class UserProfileActivity extends AppCompatActivity implements Navigator {
+public class UserProfileActivity extends AppCompatActivity implements Navigator, View.OnTouchListener {
 
     EditText editTextUsername, editTextPassword, editTextEmail,
             editTextAddress, editTextMobile, editTextTmvID, editTextTmvPass;
@@ -68,18 +70,30 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
 
         imageUserProfile = (ImageView) findViewById(R.id.imageUserProfile);
 
-        UIHelper.toggleTitleApp(this);
+        //UIHelper.toggleTitleApp(this);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 getDataAPI();
-
             }
         }, Keys.PERIOD_OF_TIME_WAIT_GENERAL);
 
+        // set the main layout for hiding keyboard
+        findViewById(R.id.linearLayoutUserProfile).setOnTouchListener(this);
 
+        // hide the main view show the loading first
+        showLoading(true);
+    }
+
+    private void showLoading(boolean b){
+        if(b) {
+            linearUserProfileLoading.setVisibility(View.VISIBLE);
+            scrollViewUserProfile.setVisibility(View.GONE);
+        } else {
+            linearUserProfileLoading.setVisibility(View.GONE);
+            scrollViewUserProfile.setVisibility(View.VISIBLE);
+        }
     }
 
     public void saveUserProfile(View v) {
@@ -277,9 +291,13 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
 
                 Bitmap b = BitmapFactory.decodeFile(respond);
                 imageUserProfile.setImageBitmap(b);
+
+                // hide the loading and show the normal scroll data
+                showLoading(false);
+
             }
         } catch (Exception err) {
-            ErrorLogger.write(err);
+            ErrorLogger.write(this, err);
             ShowDialog.message(this, "Error obtaining userprofile data! Please contact administrator!");
             ShowDialog.message(this, err.getMessage());
 
@@ -288,4 +306,10 @@ public class UserProfileActivity extends AppCompatActivity implements Navigator 
     }
 
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        return false;
+    }
 }

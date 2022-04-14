@@ -74,13 +74,17 @@ public class LoginActivity extends AppCompatActivity implements Navigator {
 
     private void requestPermission(){
         int PERMISSION_ALL = 1;
+        // excluded:
+        // android.Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+        //                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        //                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+
         String[] PERMISSIONS = {
-                android.Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 android.Manifest.permission.INTERNET,
                 android.Manifest.permission.CAMERA,
                 android.Manifest.permission.ACCESS_WIFI_STATE,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 android.Manifest.permission.MODIFY_AUDIO_SETTINGS,
                 android.Manifest.permission.SET_ALARM,
                 android.Manifest.permission.WAKE_LOCK,

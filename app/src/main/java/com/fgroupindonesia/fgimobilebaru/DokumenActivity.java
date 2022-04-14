@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -54,6 +55,7 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
     // for several download ProgressBars
     ProgressBar prgBar01, prgBar02;
     ImageView imageAccess;
+    TextView txtSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,34 +103,34 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
     }
 
 
-    public void shareTo(File fileIn, String titleNa){
+    public void shareTo(File fileIn, String titleNa) {
+        //ShowDialog.message(this, "mo dishare " + fileIn.getAbsolutePath());
         new WhatsappSender(this).sendFileToWhatsApp(fileIn, titleNa);
     }
 
-    private void resetItemChecked(){
+    private void resetItemChecked() {
         listViewDocument.clearChoices();
     }
 
 
+    private void showNoEntry(boolean b) {
 
-    private void showNoEntry(boolean b){
-
-        if(b){
+        if (b) {
             linearLayoutNoEntry.setVisibility(View.VISIBLE);
             listViewDocument.setVisibility(View.GONE);
-        }else {
+        } else {
             linearLayoutNoEntry.setVisibility(View.GONE);
             listViewDocument.setVisibility(View.VISIBLE);
         }
 
     }
 
-    private void showLoading(boolean b){
+    private void showLoading(boolean b) {
 
-        if(b){
+        if (b) {
             linearLayoutLoading.setVisibility(View.VISIBLE);
             linearLayoutDokumen.setVisibility(View.GONE);
-        }else {
+        } else {
             linearLayoutLoading.setVisibility(View.GONE);
             linearLayoutDokumen.setVisibility(View.VISIBLE);
         }
@@ -136,15 +138,17 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
     }
 
 
-    public void downloadFile(ImageView img, ProgressBar prgBar1, ProgressBar prgBar2, String fileName, String alamatTujuan ){
+    public void downloadFile(TextView txt, ImageView img, ProgressBar prgBar1, ProgressBar prgBar2, String fileName, String alamatTujuan) {
 
         // ShowDialog.message(this, "testing download " + alamatTujuan);
         // self referencing for future usage after success callback returned
         prgBar01 = prgBar1;
         prgBar02 = prgBar2;
         imageAccess = img;
+        txtSize = txt;
 
         WebFetch httpCall = new WebFetch(this, this);
+
         httpCall.setFileNameToBeSaved(fileName);
         httpCall.setTargetURL(alamatTujuan);
         httpCall.executeFetch();
@@ -152,14 +156,13 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
         // store temporarily
         urlDownload = alamatTujuan;
 
-       // ShowDialog.message(this, "Downloading from Fetcher");
+        // ShowDialog.message(this, "Downloading from Fetcher");
 
     }
 
     // additional onclick event for the listview instead of the icon clicked
-    private void setOnClickEvent(ListView el){
-        el.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+    private void setOnClickEvent(ListView el) {
+        el.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -183,26 +186,21 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
             }
         });
 
-        el.addTextChangedListener(new TextChangedListener<EditText>(el) {
+        el.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public void onTextChanged(EditText target, Editable s) {
-                if(editTextSearchDocument!=null){
+            public void afterTextChanged(Editable s) {
+            }
 
-                    String dicari = UIHelper.getText(editTextSearchDocument);
-                    if (dicari != null) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
 
-                        // when the search become not available due to empty text
-
-                        textViewDocumentTotal.setText("Keseluruhan dokumen anda berjumlah : " + dataTemp.size()+ " file.");
-                        dataDocuments = ArrayHelper.copyBackDocument(dataTemp, dataDocuments);
-                        arrayDocAdapter = new DocumentArrayAdapter(DokumenActivity.this, dataDocuments);
-                        listViewDocument.setAdapter(arrayDocAdapter);
-
-                        arrayDocAdapter.notifyDataSetChanged();
-                    }
-
-                }
-
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                searchDocument(null);
             }
         });
     }
@@ -213,15 +211,13 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
 
         //ShowDialog.message(this, "berisi temp " + dataTemp.size());
 
-        // before updated
 
         if (dicari != null) {
-            if(dicari.length()>1){
+            if (dicari.length() > 0) {
 
                 dicari = dicari.toLowerCase();
 
                 dataDocuments.clear();
-                textViewDocumentTotal.setText("Keseluruhan dokumen anda berjumlah : 0 file.");
 
                 // search through the arraylist
                 for (Document d : dataTemp) {
@@ -234,7 +230,32 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
                     }
                 }
 
+                textViewDocumentTotal.setText("Keseluruhan dokumen anda berjumlah : " +dataDocuments.size() +" file.");
+
                 arrayDocAdapter.notifyDataSetChanged();
+
+                if(dataDocuments.size()==0){
+                    showLoading(false);
+                    showNoEntry(true);
+                }else{
+                    showLoading(false);
+                    showNoEntry(false);
+                }
+
+
+            } else {
+                // when empty
+                // we store back the data
+                // when the search become not available due to empty text
+                textViewDocumentTotal.setText("Keseluruhan dokumen anda berjumlah : " + dataTemp.size() + " file.");
+                dataDocuments = ArrayHelper.copyBackDocument(dataTemp, dataDocuments);
+
+                arrayDocAdapter = new DocumentArrayAdapter(DokumenActivity.this, dataDocuments);
+                arrayDocAdapter.setActivity(DokumenActivity.this);
+                listViewDocument.setAdapter(arrayDocAdapter);
+
+                arrayDocAdapter.notifyDataSetChanged();
+
 
 
             }
@@ -256,25 +277,26 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
 
     }
 
-    public String getCurrentFileName(){
+    public String getCurrentFileName() {
         return fileName;
     }
 
-    public void setCurrentFileName(String n){
+    public void setCurrentFileName(String n) {
         fileName = n;
     }
 
     @Override
-    public void onFailed(){
+    public void onFailed() {
         // usually because no internet
 
     }
 
     @Override
     public void nextActivity() {
-            Intent n = new Intent(this, PDFActivity.class);
-            n.putExtra(Keys.FILE_PDF_TARGET, getCurrentFileName());
-            startActivity(n);
+        Intent n = new Intent(this, PDFActivity.class);
+        n.putExtra(Keys.FILE_PDF_TARGET, getCurrentFileName());
+        startActivity(n);
+        finish();
     }
 
 
@@ -314,18 +336,18 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
 
                 //ShowDialog.message(this, "we got " + respond);
 
-            }else{
+            } else {
                 // this is for invalid response from the server
 
-                if(urlDownload!=null){
+                if (urlDownload != null) {
 
-                    if(urlTarget.contains(urlDownload)){
+                    if (urlTarget.contains(urlDownload)) {
                         // refresh the layout
                         // calling to Server API for documents
                         getDocumentsUser();
                     }
 
-                }else if(urlTarget.contains(URLReference.DocumentAll)){
+                } else if (urlTarget.contains(URLReference.DocumentAll)) {
                     showLoading(false);
                     showNoEntry(true);
                 }
@@ -338,19 +360,28 @@ public class DokumenActivity extends AppCompatActivity implements Navigator, Nav
 
     }
 
+    private void refreshCurrentActivity() {
+
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+        finish();
+    }
+
+
     @Override
     public void onSuccessByFetch(String urlTarget, String result) {
-        // this is a call back of completed download by 3rd party fetch library
-
-        if(urlTarget.contains(urlDownload)){
-            prgBar01.setVisibility(View.GONE);
+        if (urlTarget.contains(urlDownload)) {
+        /*    prgBar01.setVisibility(View.GONE);
             prgBar02.setVisibility(View.GONE);
 
+            txtSize.setText(fileSize);
             imageAccess.setImageResource(R.drawable.checklist);
             imageAccess.setTag("checklist");
             imageAccess.setVisibility(View.VISIBLE);
 
+         */
+            refreshCurrentActivity();
         }
-
     }
 }
